@@ -211,6 +211,9 @@ def create_admin_if_not_exists():
             db.session.add(user)
             db.session.commit()
 
-if __name__ == '__main__':
+# Ensure tables and admin user are created whether run locally or via Gunicorn
+with app.app_context():
     create_admin_if_not_exists()
+
+if __name__ == '__main__':
     app.run(debug=True, port=5007)
