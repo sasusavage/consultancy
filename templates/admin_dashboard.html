@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Comfydoe Admin Dashboard</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary": "#c6c6c7",
+              "on-surface-variant": "#cec5b7",
+              "on-primary-fixed": "#251a00",
+              "error": "#ffb4ab",
+              "primary-fixed": "#f7e0b1",
+              "on-tertiary-container": "#484a65",
+              "secondary-fixed-dim": "#c6c6c7",
+              "outline-variant": "#4c463b",
+              "tertiary-container": "#b9bbda",
+              "tertiary-fixed-dim": "#c2c4e4",
+              "on-secondary-fixed": "#1a1c1d",
+              "background": "#121415",
+              "secondary-fixed": "#e2e2e3",
+              "on-secondary": "#2f3132",
+              "on-primary-fixed-variant": "#544522",
+              "surface-container-highest": "#333536",
+              "inverse-primary": "#6d5d37",
+              "primary": "#edd7a8",
+              "inverse-on-surface": "#2f3132",
+              "on-secondary-container": "#b4b5b6",
+              "outline": "#979083",
+              "on-tertiary-fixed-variant": "#42455f",
+              "surface-container": "#1e2021",
+              "error-container": "#93000a",
+              "on-secondary-fixed-variant": "#454748",
+              "surface-bright": "#38393a",
+              "on-error-container": "#ffdad6",
+              "secondary-container": "#454748",
+              "surface-dim": "#121415",
+              "surface-container-low": "#1a1c1d",
+              "primary-fixed-dim": "#dac497",
+              "on-tertiary-fixed": "#171a31",
+              "inverse-surface": "#e2e2e3",
+              "on-tertiary": "#2c2f47",
+              "on-primary": "#3c2f0e",
+              "surface-tint": "#dac497",
+              "on-primary-container": "#594a27",
+              "surface-variant": "#333536",
+              "surface": "#121415",
+              "on-surface": "#e2e2e3",
+              "surface-container-lowest": "#0c0e0f",
+              "surface-container-high": "#282a2b",
+              "on-error": "#690005",
+              "primary-container": "#d0bb8e",
+              "tertiary-fixed": "#dfe0ff",
+              "tertiary": "#d5d7f7",
+              "on-background": "#e2e2e3"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #121415;
+            color: #e2e2e3;
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-primary/30 selection:text-primary">
+<!-- SideNavBar (Shared Component) -->
+<nav class="fixed left-0 top-0 h-full z-40 flex flex-col p-6 h-screen w-72 flex-col border-r-0 bg-[#121415] dark:bg-[#121415]">
+<div class="mb-10 px-4">
+<span class="text-2xl font-black tracking-tighter text-[#edd7a8]">Comfydoe</span>
+<p class="font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] mt-1 opacity-60">Multi-Sector Admin</p>
+</div>
+<div class="flex-1 space-y-2">
+<!-- Active Navigation -->
+<a class="flex items-center gap-3 px-4 py-3 text-[#251a00] bg-gradient-to-br from-[#edd7a8] to-[#d0bb8e] rounded-md shadow-[0_0_15px_rgba(208,187,142,0.2)] font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard Overview
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+                Consultancy Inquiries
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+                Logistics Tracking
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="public">public</span>
+                Global Trade Leads
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Merchandise Inventory
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+                Booking Calendar
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                User/Client Management
+            </a>
+</div>
+<div class="mt-auto pt-6 space-y-2 border-t border-[#4c463b]/15">
+<a class="flex items-center gap-3 px-4 py-3 text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                Support
+            </a>
+<div class="flex items-center gap-3 px-4 mt-6">
+<img alt="Comfydoe Admin Profile" class="w-10 h-10 rounded-full border-2 border-primary/20" data-alt="Professional headshot of a senior executive in a dark tailored suit against a muted grey background, soft dramatic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsbwkY3uF5Ock146eEIGB5kks025_w5l_9DgauqaxO1RkKxHobiH8aOlg9JuAUQ6uFnXsFW9tCUy2gR0F9Xg3lvJcv_mKMgqL3OW0NsLJfEKGJTcHKxv26qje_CgJ9WjLovC5HanMqBnx4JqKbS_Ou5uMTw1YKYDvpxgV_taG021pl7iWYma_r7E_98YTkGcWHeXhFZLelD_yzzrawdwBEBUyF3ZcN-nvddSJB9hLXJZURbZKAzprGd8pjxONNlkccHTv51iBbim4"/>
+<div class="overflow-hidden">
+<p class="text-sm font-bold text-[#edd7a8] truncate">Alexander Doe</p>
+<p class="text-xs text-[#cec5b7] opacity-60">Master Administrator</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- TopNavBar (Shared Component) -->
+<header class="flex justify-between items-center w-full px-8 py-4 ml-72 max-w-[calc(100%-18rem)] fixed top-0 bg-[#333536]/60 backdrop-blur-xl border-b border-[#4c463b]/15 shadow-[0_4px_32px_rgba(0,0,0,0.06)] z-30">
+<div class="relative w-96 group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#cec5b7] text-lg">search</span>
+<input class="w-full bg-surface-container-highest/50 border-none rounded-xl py-2 pl-10 pr-4 text-sm font-['Manrope'] font-medium text-[#cec5b7] focus:ring-1 focus:ring-[#d0bb8e]/20 transition-all" placeholder="Search across sectors..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative text-[#cec5b7] hover:text-[#edd7a8] transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-primary rounded-full"></span>
+</button>
+<div class="h-6 w-px bg-outline-variant/30"></div>
+<div class="flex items-center gap-3">
+<span class="text-xs font-['Manrope'] font-medium text-[#cec5b7]">ADMIN SYSTEM STATUS: <span class="text-[#edd7a8]">OPTIMAL</span></span>
+<div class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_8px_#4ade80]"></div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-72 mt-20 p-8 min-h-screen">
+<!-- Metrics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<!-- Total Leads -->
+<div class="bg-surface-container p-6 rounded-xl border-t-2 border-primary flex flex-col gap-1 transition-all hover:translate-y-[-4px]">
+<span class="text-[#cec5b7] text-xs font-['Manrope'] font-bold tracking-wider">TOTAL LEADS</span>
+<div class="flex items-end justify-between">
+<span class="text-3xl font-headline font-extrabold text-[#edd7a8]">1,248</span>
+<span class="text-green-400 text-xs font-bold bg-green-400/10 px-2 py-1 rounded">+12%</span>
+</div>
+</div>
+<!-- Pending Bookings -->
+<div class="bg-surface-container p-6 rounded-xl border-t-2 border-primary/40 flex flex-col gap-1 transition-all hover:translate-y-[-4px]">
+<span class="text-[#cec5b7] text-xs font-['Manrope'] font-bold tracking-wider">PENDING BOOKINGS</span>
+<div class="flex items-end justify-between">
+<span class="text-3xl font-headline font-extrabold text-[#edd7a8]">42</span>
+<span class="text-yellow-400 text-xs font-bold bg-yellow-400/10 px-2 py-1 rounded">Action Required</span>
+</div>
+</div>
+<!-- Logistics -->
+<div class="bg-surface-container p-6 rounded-xl border-t-2 border-primary/40 flex flex-col gap-1 transition-all hover:translate-y-[-4px]">
+<span class="text-[#cec5b7] text-xs font-['Manrope'] font-bold tracking-wider">LOGISTICS IN TRANSIT</span>
+<div class="flex items-end justify-between">
+<span class="text-3xl font-headline font-extrabold text-[#edd7a8]">15</span>
+<span class="material-symbols-outlined text-primary/40">local_shipping</span>
+</div>
+</div>
+<!-- Revenue -->
+<div class="bg-surface-container p-6 rounded-xl border-t-2 border-primary flex flex-col gap-1 transition-all hover:translate-y-[-4px]">
+<span class="text-[#cec5b7] text-xs font-['Manrope'] font-bold tracking-wider">MONTHLY REVENUE</span>
+<div class="flex items-end justify-between">
+<span class="text-3xl font-headline font-extrabold text-[#edd7a8]">$85k</span>
+<span class="text-green-400 text-xs font-bold bg-green-400/10 px-2 py-1 rounded">+24%</span>
+</div>
+</div>
+</div>
+<!-- Main Dashboard Section -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Lead Growth Graph -->
+<div class="col-span-12 lg:col-span-8 space-y-8">
+<div class="bg-surface-container p-8 rounded-xl h-[450px] relative overflow-hidden">
+<div class="flex justify-between items-start mb-10">
+<div>
+<h2 class="text-2xl font-headline font-bold text-[#edd7a8]">Lead Growth Analytics</h2>
+<p class="text-on-surface-variant text-sm font-medium">Performance tracking across Global Trade &amp; Consultancy</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-highest text-xs px-3 py-1.5 rounded text-[#cec5b7] hover:text-[#edd7a8] transition-colors">Weekly</button>
+<button class="bg-primary text-[#251a00] text-xs px-3 py-1.5 rounded font-bold">Monthly</button>
+</div>
+</div>
+<!-- Chart Placeholder Visual -->
+<div class="w-full h-64 flex items-end gap-2 px-2 relative">
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+<div class="h-px w-full bg-outline-variant/10"></div>
+<div class="h-px w-full bg-outline-variant/10"></div>
+<div class="h-px w-full bg-outline-variant/10"></div>
+<div class="h-px w-full bg-outline-variant/10"></div>
+</div>
+<div class="w-full h-40 bg-gradient-to-t from-primary/20 to-primary/5 rounded-t-lg relative group">
+<div class="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 bg-primary rounded-full shadow-[0_0_10px_#edd7a8] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="w-full h-56 bg-gradient-to-t from-primary/20 to-primary/5 rounded-t-lg relative"></div>
+<div class="w-full h-32 bg-gradient-to-t from-primary/20 to-primary/5 rounded-t-lg relative"></div>
+<div class="w-full h-64 bg-gradient-to-t from-primary/20 to-primary/5 rounded-t-lg relative"></div>
+<div class="w-full h-48 bg-gradient-to-t from-primary/20 to-primary/5 rounded-t-lg relative"></div>
+<div class="w-full h-72 bg-gradient-to-t from-primary/20 to-primary/5 rounded-t-lg relative"></div>
+<div class="w-full h-52 bg-gradient-to-t from-primary/20 to-primary/5 rounded-t-lg relative"></div>
+</div>
+<div class="flex justify-between mt-4 text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">
+<span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span>
+</div>
+</div>
+<!-- Recent Activity Table -->
+<div class="bg-surface-container rounded-xl overflow-hidden">
+<div class="p-6 flex justify-between items-center border-b border-outline-variant/10">
+<h3 class="font-headline font-bold text-lg text-[#edd7a8]">Recent Activity</h3>
+<button class="text-primary text-sm font-bold hover:underline decoration-2 underline-offset-4">View All Logs</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-[#cec5b7] text-[10px] uppercase tracking-widest font-bold">
+<tr>
+<th class="px-6 py-4">Client Name</th>
+<th class="px-6 py-4">Service Interested In</th>
+<th class="px-6 py-4">Date</th>
+<th class="px-6 py-4">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">JW</div>
+<span class="text-sm font-semibold">Julian Waters</span>
+</td>
+<td class="px-6 py-4 text-sm text-[#cec5b7]">Logistics Strategy</td>
+<td class="px-6 py-4 text-sm text-[#cec5b7]">Oct 24, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-400/10 text-green-400">Closed</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">AS</div>
+<span class="text-sm font-semibold">Amara Smith</span>
+</td>
+<td class="px-6 py-4 text-sm text-[#cec5b7]">Global Export Leads</td>
+<td class="px-6 py-4 text-sm text-[#cec5b7]">Oct 23, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-400/10 text-blue-400">New</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">RB</div>
+<span class="text-sm font-semibold">Robert Black</span>
+</td>
+<td class="px-6 py-4 text-sm text-[#cec5b7]">Inventory Management</td>
+<td class="px-6 py-4 text-sm text-[#cec5b7]">Oct 22, 2023</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-yellow-400/10 text-yellow-400">Contacted</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Sidebar -->
+<aside class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Booking Calendar Widget -->
+<div class="bg-surface-container p-6 rounded-xl">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline font-bold text-[#edd7a8]">Booking Calendar</h3>
+<div class="flex gap-2">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors text-lg">chevron_left</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors text-lg">chevron_right</button>
+</div>
+</div>
+<div class="text-center mb-4 font-bold text-xs text-[#cec5b7] uppercase tracking-[0.2em]">October 2023</div>
+<div class="grid grid-cols-7 gap-2 text-center text-[10px] text-on-surface-variant mb-2">
+<span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+</div>
+<div class="grid grid-cols-7 gap-2 text-center">
+<!-- Simplified Calendar Grid -->
+<span class="py-2 text-xs text-outline-variant">25</span>
+<span class="py-2 text-xs text-outline-variant">26</span>
+<span class="py-2 text-xs text-outline-variant">27</span>
+<span class="py-2 text-xs text-outline-variant">28</span>
+<span class="py-2 text-xs text-outline-variant">29</span>
+<span class="py-2 text-xs text-outline-variant">30</span>
+<span class="py-2 text-xs text-[#edd7a8] font-bold">1</span>
+<span class="py-2 text-xs text-[#edd7a8] font-bold">2</span>
+<span class="py-2 text-xs text-[#edd7a8] font-bold">3</span>
+<span class="py-2 text-xs text-[#edd7a8] font-bold bg-primary/20 rounded">4</span>
+<span class="py-2 text-xs text-[#edd7a8] font-bold">5</span>
+<span class="py-2 text-xs text-[#edd7a8] font-bold">6</span>
+<span class="py-2 text-xs text-[#edd7a8] font-bold">7</span>
+<span class="py-2 text-xs text-[#edd7a8] font-bold">8</span>
+<!-- ... rest of the days ... -->
+</div>
+<div class="mt-6 pt-6 border-t border-outline-variant/10 space-y-4">
+<p class="text-[10px] font-bold text-[#cec5b7] uppercase tracking-widest">Upcoming Today</p>
+<div class="flex gap-4 items-center">
+<div class="w-1 h-10 bg-primary rounded-full"></div>
+<div>
+<p class="text-sm font-bold">Global Trade Sync</p>
+<p class="text-xs text-[#cec5b7]">14:30 - 15:30</p>
+</div>
+</div>
+<div class="flex gap-4 items-center opacity-60">
+<div class="w-1 h-10 bg-outline-variant rounded-full"></div>
+<div>
+<p class="text-sm font-bold">Inventory Audit</p>
+<p class="text-xs text-[#cec5b7]">16:00 - 17:00</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Admin Action Bento -->
+<div class="space-y-4">
+<div class="bg-gradient-to-br from-[#edd7a8] to-[#d0bb8e] p-6 rounded-xl shadow-[0_8px_24px_rgba(208,187,142,0.15)] group cursor-pointer transition-transform hover:scale-[1.02]">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-[#251a00] text-3xl">add_circle</span>
+<span class="material-symbols-outlined text-[#251a00] opacity-50 group-hover:opacity-100 transition-opacity">north_east</span>
+</div>
+<h4 class="text-[#251a00] font-headline font-extrabold text-lg">Create New Inquiry</h4>
+<p class="text-[#251a00]/70 text-sm font-medium mt-1">Manual entry for offline leads</p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container p-4 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary mb-2">download</span>
+<p class="text-xs font-bold">Export Data</p>
+</div>
+<div class="bg-surface-container p-4 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary mb-2">share</span>
+<p class="text-xs font-bold">Share Report</p>
+</div>
+</div>
+</div>
+<!-- System Performance Monitor -->
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary text-sm">settings_input_component</span>
+<h4 class="text-xs font-bold text-[#cec5b7] uppercase tracking-widest">Server Health</h4>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-xs mb-1">
+<span>Processing Power</span>
+<span class="text-primary">42%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[42%]"></div>
+</div>
+<div class="flex justify-between text-xs mb-1 pt-2">
+<span>Database Latency</span>
+<span class="text-primary">12ms</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[15%]"></div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- FAB Action (Suppressed as per rules for Details/Settings/Transactional, but enabled for Dashboard Overview) -->
+<button class="fixed bottom-8 right-8 bg-gradient-to-br from-[#edd7a8] to-[#d0bb8e] w-14 h-14 rounded-full shadow-[0_8px_32px_rgba(208,187,142,0.3)] flex items-center justify-center text-[#251a00] hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-2xl font-bold">bolt</span>
+</button>
+</body></html>

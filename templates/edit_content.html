@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Comfydoe | Homepage CMS</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#edd7a8",
+                        "primary-container": "#d0bb8e",
+                        "on-primary-fixed": "#251a00",
+                        "surface": "#121415",
+                        "surface-container": "#1e2021",
+                        "surface-container-high": "#282a2b",
+                        "surface-variant": "#333536",
+                        "on-surface": "#e2e2e3",
+                        "on-surface-variant": "#cec5b7",
+                        "outline-variant": "#4c463b",
+                        "error": "#ffb4ab",
+                        "error-container": "#93000a",
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Manrope"],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body { background-color: #121415; color: #e2e2e3; font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .upload-zone { border: 2px dashed #4c463b; transition: all 0.3s; }
+        .upload-zone:hover { border-color: #edd7a8; background: rgba(237,215,168,0.03); }
+        .upload-zone.dragover { border-color: #edd7a8; background: rgba(237,215,168,0.08); }
+    </style>
+</head>
+<body>
+<div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-72 bg-surface p-6 flex flex-col flex-shrink-0 border-r border-outline-variant/10">
+        <div class="mb-10">
+            <h1 class="text-2xl font-black tracking-tighter text-primary font-headline">Comfydoe</h1>
+            <p class="text-sm text-on-surface-variant font-bold mt-1">Content Manager</p>
+        </div>
+        <nav class="flex-1 space-y-1">
+            <a href="#section-hero" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-bold text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all">
+                <span class="material-symbols-outlined text-lg">star</span> Hero Section
+            </a>
+            <a href="#section-about" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-bold text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all">
+                <span class="material-symbols-outlined text-lg">person</span> About Section
+            </a>
+            <a href="#section-images" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-bold text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all">
+                <span class="material-symbols-outlined text-lg">image</span> Image Gallery
+            </a>
+            <a href="#section-contact" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-bold text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all">
+                <span class="material-symbols-outlined text-lg">call</span> Contact Info
+            </a>
+        </nav>
+        <div class="mt-auto pt-6 border-t border-outline-variant/10 space-y-2">
+            <a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-bold text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all">
+                <span class="material-symbols-outlined text-lg">arrow_back</span> Back to Dashboard
+            </a>
+            <a href="{{ url_for('index') }}" target="_blank" class="flex items-center gap-3 px-4 py-3 rounded-md text-sm font-bold text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all">
+                <span class="material-symbols-outlined text-lg">visibility</span> Preview Live Site
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+        <!-- Top Bar -->
+        <header class="sticky top-0 z-30 bg-surface-variant/60 backdrop-blur-xl px-8 py-4 border-b border-outline-variant/10 flex justify-between items-center">
+            <div>
+                <h2 class="text-xl font-bold font-headline text-primary">Homepage Content Manager</h2>
+                <p class="text-xs text-on-surface-variant">Edit text, images, and layout of your public homepage</p>
+            </div>
+            <button type="submit" form="cms-form" class="px-8 py-3 bg-gradient-to-br from-primary to-primary-container text-on-primary-fixed font-bold rounded-lg shadow-lg hover:scale-[1.02] active:scale-95 transition-transform flex items-center gap-2">
+                <span class="material-symbols-outlined text-lg">publish</span> Publish All Changes
+            </button>
+        </header>
+
+        <div class="p-8 max-w-4xl mx-auto">
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="mb-6 p-4 rounded-lg font-bold text-sm flex items-center gap-3 {% if category == 'error' %}bg-error-container/30 text-error{% else %}bg-outline-variant/20 text-primary{% endif %}">
+                    <span class="material-symbols-outlined">{% if category == 'error' %}error{% else %}check_circle{% endif %}</span>
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <form id="cms-form" action="{{ url_for('edit_content') }}" method="POST" enctype="multipart/form-data" class="space-y-12">
+
+                <!-- HERO SECTION -->
+                <section id="section-hero" class="bg-surface-container rounded-2xl p-8 border border-outline-variant/10">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary">star</span>
+                        </div>
+                        <div>
+                            <h3 class="font-headline font-bold text-lg text-on-surface">Hero Section</h3>
+                            <p class="text-xs text-on-surface-variant">The first thing visitors see</p>
+                        </div>
+                    </div>
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Headline</label>
+                            <p class="text-[10px] text-on-surface-variant/60 mb-2">Use <code class="bg-surface-variant px-1 rounded text-primary">&lt;span class="text-gradient-gold"&gt;...&lt;/span&gt;</code> for gold highlights</p>
+                            <textarea name="hero_title" rows="2" class="w-full bg-surface border border-outline-variant/30 rounded-lg p-4 text-on-surface focus:ring-1 focus:ring-primary/50 focus:border-primary/50 font-headline font-bold text-lg transition-all">{{ content.hero_title | default('Turning Global Vision into <span class="text-gradient-gold">Operational Reality.</span>') }}</textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Subtitle</label>
+                            <textarea name="hero_subtitle" rows="2" class="w-full bg-surface border border-outline-variant/30 rounded-lg p-4 text-on-surface focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all">{{ content.hero_subtitle | default('Comfort Doe provides elite consultancy, seamless logistics, and global trade solutions designed for the modern enterprise.') }}</textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Hero Portrait Image</label>
+                            <div class="flex items-start gap-6">
+                                <div class="w-32 h-40 rounded-lg overflow-hidden bg-surface-variant flex-shrink-0 border border-outline-variant/20">
+                                    <img id="hero_image_preview" src="{{ content.hero_image if content.hero_image else 'https://lh3.googleusercontent.com/aida-public/AB6AXuDn3m5r3s6273e6JdLjmFNjR3hM0qkBmj32tvOSUs-eLldiAXgu4jal1mpDi1_fNagFLgMgb2j7_3huXSpI7kBCLVuUf2Bln_YXAptl2r5xIUJVt_paek1MDWi7X1vDaoOWq8ya2NEZKyMm8BtR17rTMo8b8NXuKBBUa8VB8nHU5324UDR-EBcWoyYKtlazmDoMRGH8H1gIukBdXezHrmo3FdSAE4PwX3g4H4cLRyv3Ur2jEA99hedKn3PkJF2GnSZbPWOiX3AkxIM' }}" alt="Hero preview" class="w-full h-full object-cover">
+                                </div>
+                                <label class="upload-zone flex-1 rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer min-h-[160px]">
+                                    <span class="material-symbols-outlined text-3xl text-on-surface-variant/40 mb-2">cloud_upload</span>
+                                    <span class="text-sm font-bold text-on-surface-variant">Click to upload</span>
+                                    <span class="text-xs text-on-surface-variant/50 mt-1">PNG, JPG, WEBP up to 16MB</span>
+                                    <input type="file" name="hero_image" accept="image/*" class="hidden" onchange="previewImage(this, 'hero_image_preview')">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ABOUT SECTION -->
+                <section id="section-about" class="bg-surface-container rounded-2xl p-8 border border-outline-variant/10">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary">person</span>
+                        </div>
+                        <div>
+                            <h3 class="font-headline font-bold text-lg text-on-surface">About / Profile Section</h3>
+                            <p class="text-xs text-on-surface-variant">Personal bio and signature quote</p>
+                        </div>
+                    </div>
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">About Text</label>
+                            <textarea name="about_text" rows="5" class="w-full bg-surface border border-outline-variant/30 rounded-lg p-4 text-on-surface focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all">{{ content.about_text | default("Comfort Doe is a distinguished leader in Africa's trade and consultancy landscape. As the founder of Comfydoe, she integrates strategic insight with hands-on operational expertise to help businesses bridge the gap between local potential and global markets.\n\nHer philosophy centers on \"Operational Sovereignty\"—the belief that a business's strength is defined by the resilience and autonomy of its core systems.") }}</textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Signature Quote</label>
+                            <textarea name="about_quote" rows="2" class="w-full bg-surface border border-outline-variant/30 rounded-lg p-4 text-on-surface focus:ring-1 focus:ring-primary/50 focus:border-primary/50 italic transition-all">{{ content.about_quote | default("Global trade isn't just about moving goods; it's about honoring the vision behind the product.") }}</textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">About Background Image</label>
+                            <div class="flex items-start gap-6">
+                                <div class="w-40 h-24 rounded-lg overflow-hidden bg-surface-variant flex-shrink-0 border border-outline-variant/20">
+                                    <img id="about_image_preview" src="{{ content.about_image if content.about_image else 'https://lh3.googleusercontent.com/aida-public/AB6AXuCGP9ArOTjl5PP1NlvIsb-SQoNkBV9NiGbeZ9WMgaHsyzAWdY_GYntW02AsnbUPtRl9_BURRqSpGu2b2YjBgZpnIMVaBA3fw06Lbp6neiE6n39AwdF5XROnAPeLldzqak1_TZzgXLIRavn3Ksih8VOdBFVkIc93bf2Wo1_Nlw78rd9m8snh-vX-1d_JKzJxGEpxo_Uyo2EcNDnexajRxZlg3KwnlRPeFujU18WX3M5-jPZWBzNrqRSAd4-5KdKb4R96_z4xBQd63_E' }}" alt="About preview" class="w-full h-full object-cover">
+                                </div>
+                                <label class="upload-zone flex-1 rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer min-h-[96px]">
+                                    <span class="material-symbols-outlined text-2xl text-on-surface-variant/40 mb-1">cloud_upload</span>
+                                    <span class="text-sm font-bold text-on-surface-variant">Upload about image</span>
+                                    <input type="file" name="about_image" accept="image/*" class="hidden" onchange="previewImage(this, 'about_image_preview')">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- IMAGE GALLERY SECTION -->
+                <section id="section-images" class="bg-surface-container rounded-2xl p-8 border border-outline-variant/10">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary">image</span>
+                        </div>
+                        <div>
+                            <h3 class="font-headline font-bold text-lg text-on-surface">Service Images</h3>
+                            <p class="text-xs text-on-surface-variant">Photos used in the Consultancy & Logistics sections</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Strategy Image -->
+                        <div class="space-y-3">
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest">Consultancy / Strategy</label>
+                            <div class="w-full aspect-video rounded-lg overflow-hidden bg-surface-variant border border-outline-variant/20">
+                                <img id="strategy_image_preview" src="{{ content.strategy_image if content.strategy_image else 'https://lh3.googleusercontent.com/aida-public/AB6AXuBQyXQCAO8qxTmmkyGHwr0WNWMQaeuq1HlLcPVgRkfKXhpdmREs3lhtEN48q2iGRGnDE9ello940cubG2MY2x7jQhBcTCu-UYK9ecbQptEPOhvjTtpNFyQfhFZ-4tS_53h9jNL9jpAwH_tswEys4SLhvPBh9lIPFHFB6SMTB37Ydj-NwRs12RHo9Q9_Z1GwcINxy0FYZX6Y8vp9etR9S97kfaL3mwyxWq7x3CHl9qEMIHuxTjnGsRnqdrtAUTxrmcHWRrfjJXAP5wA' }}" alt="Strategy preview" class="w-full h-full object-cover">
+                            </div>
+                            <label class="upload-zone rounded-lg p-4 flex items-center justify-center gap-3 cursor-pointer">
+                                <span class="material-symbols-outlined text-on-surface-variant/40">cloud_upload</span>
+                                <span class="text-sm font-bold text-on-surface-variant">Replace image</span>
+                                <input type="file" name="strategy_image" accept="image/*" class="hidden" onchange="previewImage(this, 'strategy_image_preview')">
+                            </label>
+                        </div>
+                        <!-- Logistics Image -->
+                        <div class="space-y-3">
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest">Logistics / Shipping</label>
+                            <div class="w-full aspect-video rounded-lg overflow-hidden bg-surface-variant border border-outline-variant/20">
+                                <img id="logistics_image_preview" src="{{ content.logistics_image if content.logistics_image else 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkCFOwbrPeMRretclKPzV1kr32KDpOxGW4LcPuAK0HIbMtX5aJLXAfDwBsVaqltzd8jn09yyKHVcRjf8ko3YMHkc7kamucQAtjfKqpE3qSGif8d5-NpAsPObLeDfMDX8ndVI9yhcnw4NtNo190RfrUofmkRfs7VsYCfeayynEmj0ETFS4noF8-NRnCpE_64WybCOc6vcDB5IPDeurnWgvkIchHW944qjufWYF88YnOgfVsFt8dj5ndruxyX_QSPkwirIn5_gODO80' }}" alt="Logistics preview" class="w-full h-full object-cover">
+                            </div>
+                            <label class="upload-zone rounded-lg p-4 flex items-center justify-center gap-3 cursor-pointer">
+                                <span class="material-symbols-outlined text-on-surface-variant/40">cloud_upload</span>
+                                <span class="text-sm font-bold text-on-surface-variant">Replace image</span>
+                                <input type="file" name="logistics_image" accept="image/*" class="hidden" onchange="previewImage(this, 'logistics_image_preview')">
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CONTACT INFO SECTION -->
+                <section id="section-contact" class="bg-surface-container rounded-2xl p-8 border border-outline-variant/10">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary">call</span>
+                        </div>
+                        <div>
+                            <h3 class="font-headline font-bold text-lg text-on-surface">Contact Information</h3>
+                            <p class="text-xs text-on-surface-variant">Displayed in the booking section</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Email Address</label>
+                            <input type="text" name="contact_email" value="{{ content.contact_email | default('advisory@comfydoe.pro') }}" class="w-full bg-surface border border-outline-variant/30 rounded-lg p-4 text-on-surface focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Phone Number</label>
+                            <input type="text" name="contact_phone" value="{{ content.contact_phone | default('+1 (555) COMFYDOE') }}" class="w-full bg-surface border border-outline-variant/30 rounded-lg p-4 text-on-surface focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Bottom Publish -->
+                <div class="flex justify-between items-center py-6">
+                    <a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-bold">
+                        <span class="material-symbols-outlined">arrow_back</span> Return to Dashboard
+                    </a>
+                    <button type="submit" class="px-10 py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary-fixed font-bold rounded-lg shadow-xl hover:scale-[1.02] active:scale-95 transition-transform flex items-center gap-2 text-lg">
+                        <span class="material-symbols-outlined">publish</span> Publish All Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<script>
+function previewImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+        // Show a visual indicator
+        input.closest('.upload-zone').classList.add('border-primary', 'bg-primary/5');
+        input.closest('.upload-zone').querySelector('.material-symbols-outlined').textContent = 'check_circle';
+        input.closest('.upload-zone').querySelector('span:nth-child(2)').textContent = input.files[0].name;
+    }
+}
+
+// Drag & drop support
+document.querySelectorAll('.upload-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', e => {
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        const input = zone.querySelector('input[type="file"]');
+        if (e.dataTransfer.files.length) {
+            input.files = e.dataTransfer.files;
+            input.dispatchEvent(new Event('change'));
+        }
+    });
+});
+</script>
+</body>
+</html>

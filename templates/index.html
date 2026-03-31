@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Comfydoe | Executive Advisory &amp; Global Logistics</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#121415",
+              "surface-container-low": "#1a1c1d",
+              "surface-container-lowest": "#0c0e0f",
+              "surface-variant": "#333536",
+              "on-tertiary-container": "#484a65",
+              "secondary-fixed-dim": "#c6c6c7",
+              "outline-variant": "#4c463b",
+              "surface-tint": "#dac497",
+              "error": "#ffb4ab",
+              "on-secondary-fixed": "#1a1c1d",
+              "on-surface-variant": "#cec5b7",
+              "surface-container": "#1e2021",
+              "surface-container-high": "#282a2b",
+              "surface": "#121415",
+              "background": "#121415",
+              "on-primary-fixed-variant": "#544522",
+              "on-error-container": "#ffdad6",
+              "tertiary-container": "#b9bbda",
+              "surface-bright": "#38393a",
+              "surface-container-highest": "#333536",
+              "inverse-primary": "#6d5d37",
+              "on-primary-container": "#594a27",
+              "tertiary-fixed": "#dfe0ff",
+              "primary-fixed": "#f7e0b1",
+              "primary-container": "#d0bb8e",
+              "secondary-fixed": "#e2e2e3",
+              "on-secondary-fixed-variant": "#454748",
+              "on-primary": "#3c2f0e",
+              "outline": "#979083",
+              "inverse-on-surface": "#2f3132",
+              "error-container": "#93000a",
+              "on-surface": "#e2e2e3",
+              "primary-fixed-dim": "#dac497",
+              "on-primary-fixed": "#251a00",
+              "on-secondary-container": "#b4b5b6",
+              "on-tertiary-fixed-variant": "#42455f",
+              "on-error": "#690005",
+              "on-secondary": "#2f3132",
+              "primary": "#edd7a8",
+              "tertiary": "#d5d7f7",
+              "on-tertiary": "#2c2f47",
+              "secondary-container": "#454748",
+              "on-background": "#e2e2e3",
+              "secondary": "#c6c6c7",
+              "tertiary-fixed-dim": "#c2c4e4",
+              "on-tertiary-fixed": "#171a31",
+              "inverse-surface": "#e2e2e3"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            background: rgba(51, 53, 54, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .marquee-content {
+            display: flex;
+            animation: marquee 30s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #edd7a8 0%, #d0bb8e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-primary-gradient {
+            background: linear-gradient(135deg, #edd7a8 0%, #d0bb8e 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 glass-nav shadow-[0_32px_64px_-15px_rgba(206,197,183,0.06)]">
+<div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto font-headline tracking-tighter">
+<div class="text-xl font-bold tracking-tight text-[#d0bb8e]">Comfydoe</div>
+<!-- Desktop Nav -->
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-[#edd7a8] border-b-2 border-[#d0bb8e] pb-1 transition-colors duration-300" href="#business-target">Business Areas</a>
+<a class="text-[#cec5b7] hover:text-[#edd7a8] transition-colors duration-300" href="#about-target">About</a>
+<a class="text-[#cec5b7] hover:text-[#edd7a8] transition-colors duration-300" href="#portfolio-target">Portfolio</a>
+<button onclick="document.getElementById('contact-target').scrollIntoView({behavior: 'smooth'})" class="btn-primary-gradient text-on-primary-fixed px-6 py-2.5 rounded-lg font-bold active:scale-95 transition-transform">Consult Comfort</button>
+</div>
+<!-- Mobile Menu Toggle -->
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</nav>
+<main>
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="fixed top-24 left-1/2 -translate-x-1/2 z-[999] w-full max-w-md">
+    {% for category, message in messages %}
+      <div class="mb-2 p-4 rounded-lg font-bold text-sm shadow-2xl backdrop-blur-xl {% if category == 'error' %}bg-[#93000a]/90 text-[#ffdad6]{% else %}bg-[#1e2021]/90 text-[#dac497] border border-[#d0bb8e]/30{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center pt-20 px-8 overflow-hidden">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-7 lg:pr-12">
+<h1 class="font-headline font-extrabold text-5xl md:text-7xl lg:text-8xl leading-[1.1] tracking-tighter mb-8">
+                        {{ content.hero_title | default('Turning Global Vision into <span class="text-gradient-gold">Operational Reality.</span>') | safe }}
+</h1>
+<p class="text-on-surface-variant text-lg md:text-xl max-w-xl mb-10 font-light leading-relaxed">
+                        {{ content.hero_subtitle | default('Comfort Doe provides elite consultancy, seamless logistics, and global trade solutions designed for the modern enterprise.') }}
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button onclick="document.getElementById('contact-target').scrollIntoView({behavior: 'smooth'})" class="btn-primary-gradient text-on-primary-fixed px-8 py-4 rounded-lg font-bold text-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
+                            Consult Comfort
+                            <span class="material-symbols-outlined">calendar_today</span>
+</button>
+<button onclick="document.getElementById('contact-target').scrollIntoView({behavior: 'smooth'})" class="border border-primary/20 text-primary hover:bg-primary/10 px-8 py-4 rounded-lg font-bold text-lg transition-all flex items-center justify-center gap-2">
+                            Partner with Comfydoe
+                            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="lg:col-span-5 relative">
+<div class="relative z-10 rounded-xl overflow-hidden shadow-2xl aspect-[4/5]">
+<img alt="Comfort Doe - Executive Professional" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" src="{{ content.hero_image | default('https://lh3.googleusercontent.com/aida-public/AB6AXuDn3m5r3s6273e6JdLjmFNjR3hM0qkBmj32tvOSUs-eLldiAXgu4jal1mpDi1_fNagFLgMgb2j7_3huXSpI7kBCLVuUf2Bln_YXAptl2r5xIUJVt_paek1MDWi7X1vDaoOWq8ya2NEZKyMm8BtR17rTMo8b8NXuKBBUa8VB8nHU5324UDR-EBcWoyYKtlazmDoMRGH8H1gIukBdXezHrmo3FdSAE4PwX3g4H4cLRyv3Ur2jEA99hedKn3PkJF2GnSZbPWOiX3AkxIM') }}"/>
+</div>
+<!-- Decorative Background Element -->
+<div class="absolute -bottom-10 -right-10 w-64 h-64 bg-primary/10 rounded-full blur-[80px]"></div>
+</div>
+</div>
+</section>
+<!-- Trust Bar (Scrolling Marquee) -->
+<section class="py-12 bg-surface-container-lowest overflow-hidden border-y border-outline-variant/10">
+<div class="marquee-content gap-24 items-center">
+<!-- Logos repeat -->
+<div class="flex items-center gap-24 whitespace-nowrap opacity-40 grayscale hover:opacity-100 transition-opacity">
+<span class="text-2xl font-bold font-headline tracking-widest uppercase">GlobalLink</span>
+<span class="text-2xl font-bold font-headline tracking-widest uppercase">AdvisoryOne</span>
+<span class="text-2xl font-bold font-headline tracking-widest uppercase">PortCore</span>
+<span class="text-2xl font-bold font-headline tracking-widest uppercase">SwiftLogist</span>
+<span class="text-2xl font-bold font-headline tracking-widest uppercase">MerchX</span>
+<span class="text-2xl font-bold font-headline tracking-widest uppercase">GlobalLink</span>
+<span class="text-2xl font-bold font-headline tracking-widest uppercase">AdvisoryOne</span>
+<span class="text-2xl font-bold font-headline tracking-widest uppercase">PortCore</span>
+<span class="text-2xl font-bold font-headline tracking-widest uppercase">SwiftLogist</span>
+<span class="text-2xl font-bold font-headline tracking-widest uppercase">MerchX</span>
+</div>
+</div>
+</section>
+<!-- The Four Pillars (Bento-style Grid) -->
+<section id="business-target" class="py-24 px-8 bg-surface">
+<div class="max-w-7xl mx-auto">
+<div class="mb-16">
+<h2 class="font-headline font-bold text-4xl md:text-5xl mb-4">The Four Pillars</h2>
+<p class="text-on-surface-variant max-w-lg">Defining the standard of excellence across multiple high-impact sectors.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Pillar 1 -->
+<div class="group bg-surface-container p-10 rounded-xl hover:bg-surface-container-high transition-all duration-300 border-t-2 border-primary">
+<span class="material-symbols-outlined text-primary text-5xl mb-6" data-icon="business_center" style="font-variation-settings: 'FILL' 1;">business_center</span>
+<h3 class="font-headline font-bold text-2xl mb-4 text-primary">Business Consultancy</h3>
+<p class="text-on-surface-variant leading-relaxed">Strategic guidance to scale your operations and leadership.</p>
+</div>
+<!-- Pillar 2 -->
+<div class="group bg-surface-container p-10 rounded-xl hover:bg-surface-container-high transition-all duration-300">
+<span class="material-symbols-outlined text-primary text-5xl mb-6" data-icon="local_shipping" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<h3 class="font-headline font-bold text-2xl mb-4">Logistics &amp; Supply</h3>
+<p class="text-on-surface-variant leading-relaxed">Reliable end-to-end supply chain management.</p>
+</div>
+<!-- Pillar 3 -->
+<div class="group bg-surface-container p-10 rounded-xl hover:bg-surface-container-high transition-all duration-300">
+<span class="material-symbols-outlined text-primary text-5xl mb-6" data-icon="public" style="font-variation-settings: 'FILL' 1;">public</span>
+<h3 class="font-headline font-bold text-2xl mb-4">Import &amp; Export</h3>
+<p class="text-on-surface-variant leading-relaxed">Navigating global trade with precision and compliance.</p>
+</div>
+<!-- Pillar 4 -->
+<div class="group bg-surface-container p-10 rounded-xl hover:bg-surface-container-high transition-all duration-300">
+<span class="material-symbols-outlined text-primary text-5xl mb-6" data-icon="inventory_2" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<h3 class="font-headline font-bold text-2xl mb-4">General Merchandise</h3>
+<p class="text-on-surface-variant leading-relaxed">Sourcing and supplying quality goods at scale.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Personal Profile (Asymmetric Layout) -->
+<section id="about-target" class="py-24 px-8 bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+<div class="lg:col-span-6 lg:order-2">
+<h2 class="font-headline font-bold text-4xl md:text-5xl mb-8">The Vision Behind Comfydoe</h2>
+<div class="space-y-6 text-on-surface-variant text-lg leading-relaxed whitespace-pre-line">
+{{ content.about_text | default('Comfort Doe is a distinguished leader in Africa&#39;s trade and consultancy landscape. As the founder of Comfydoe, she integrates strategic insight with hands-on operational expertise to help businesses bridge the gap between local potential and global markets.') }}
+</div>
+<div class="grid grid-cols-3 gap-8 mt-12 border-t border-outline-variant/20 pt-8">
+<div>
+<div class="font-headline font-bold text-3xl text-primary mb-1">15+</div>
+<div class="text-xs uppercase tracking-widest text-on-surface-variant">Years Exp.</div>
+</div>
+<div>
+<div class="font-headline font-bold text-3xl text-primary mb-1">24</div>
+<div class="text-xs uppercase tracking-widest text-on-surface-variant">Countries</div>
+</div>
+<div>
+<div class="font-headline font-bold text-3xl text-primary mb-1">2.4k</div>
+<div class="text-xs uppercase tracking-widest text-on-surface-variant">Containers</div>
+</div>
+</div>
+<button onclick="document.getElementById('contact-target').scrollIntoView({behavior: 'smooth'})" class="mt-10 btn-primary-gradient text-on-primary-fixed px-8 py-4 rounded-lg font-bold text-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
+    Consult Comfort
+</button>
+</div>
+<div class="lg:col-span-6 lg:order-1 relative h-[500px] w-full">
+<div class="absolute inset-0 bg-surface-variant rounded-xl overflow-hidden">
+<img alt="Executive workspace" class="w-full h-full object-cover opacity-60" src="{{ content.about_image | default('https://lh3.googleusercontent.com/aida-public/AB6AXuCGP9ArOTjl5PP1NlvIsb-SQoNkBV9NiGbeZ9WMgaHsyzAWdY_GYntW02AsnbUPtRl9_BURRqSpGu2b2YjBgZpnIMVaBA3fw06Lbp6neiE6n39AwdF5XROnAPeLldzqak1_TZzgXLIRavn3Ksih8VOdBFVkIc93bf2Wo1_Nlw78rd9m8snh-vX-1d_JKzJxGEpxo_Uyo2EcNDnexajRxZlg3KwnlRPeFujU18WX3M5-jPZWBzNrqRSAd4-5KdKb4R96_z4xBQd63_E') }}"/>
+</div>
+<div class="absolute bottom-10 -right-4 bg-primary p-8 rounded-lg shadow-xl max-w-[280px]">
+<p class="text-on-primary font-bold text-lg leading-tight italic">"{{ content.about_quote | default('Global trade is not just about moving goods; it is about honoring the vision behind the product.') }}"</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Service Deep-Dive (Staircase) -->
+<section id="portfolio-target" class="py-24 px-8 bg-surface">
+<div class="max-w-7xl mx-auto space-y-32">
+<!-- Deep Dive 1 -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="order-2 lg:order-1">
+<span class="text-primary font-bold tracking-widest text-sm uppercase mb-4 block">Core Competency 01</span>
+<h3 class="font-headline font-bold text-4xl mb-6">Consultancy &amp; Strategy</h3>
+<p class="text-on-surface-variant text-lg mb-8">We don't just plan; we execute. Comfort Doe works with executives to refine business models for a competitive edge. From auditing operational bottlenecks to architecting 5-year expansion plans, our consultancy is rooted in data and executive experience.</p>
+<ul class="space-y-4">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>Market Entry Strategy</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>Operational Audit &amp; Optimization</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>Investment Viability Analysis</span>
+</li>
+</ul>
+<button onclick="document.getElementById('contact-target').scrollIntoView({behavior: 'smooth'})" class="mt-8 border border-primary/20 text-primary hover:bg-primary/10 px-8 py-3 rounded-lg font-bold transition-all inline-flex items-center gap-2">
+    Partner with Comfydoe
+</button>
+</div>
+<div class="order-1 lg:order-2">
+<div class="rounded-xl overflow-hidden aspect-video bg-surface-container-high border-l-4 border-primary">
+<img alt="Strategy Meeting" class="w-full h-full object-cover grayscale opacity-50" src="{{ content.strategy_image | default('https://lh3.googleusercontent.com/aida-public/AB6AXuBQyXQCAO8qxTmmkyGHwr0WNWMQaeuq1HlLcPVgRkfKXhpdmREs3lhtEN48q2iGRGnDE9ello940cubG2MY2x7jQhBcTCu-UYK9ecbQptEPOhvjTtpNFyQfhFZ-4tS_53h9jNL9jpAwH_tswEys4SLhvPBh9lIPFHFB6SMTB37Ydj-NwRs12RHo9Q9_Z1GwcINxy0FYZX6Y8vp9etR9S97kfaL3mwyxWq7x3CHl9qEMIHuxTjnGsRnqdrtAUTxrmcHWRrfjJXAP5wA') }}"/>
+</div>
+</div>
+</div>
+<!-- Deep Dive 2 -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div>
+<div class="rounded-xl overflow-hidden aspect-video bg-surface-container-high border-r-4 border-primary">
+<img alt="Logistics Operations" class="w-full h-full object-cover grayscale opacity-50" src="{{ content.logistics_image | default('https://lh3.googleusercontent.com/aida-public/AB6AXuCkCFOwbrPeMRretclKPzV1kr32KDpOxGW4LcPuAK0HIbMtX5aJLXAfDwBsVaqltzd8jn09yyKHVcRjf8ko3YMHkc7kamucQAtjfKqpE3qSGif8d5-NpAsPObLeDfMDX8ndVI9yhcnw4NtNo190RfrUofmkRfs7VsYCfeayynEmj0ETFS4noF8-NRnCpE_64WybCOc6vcDB5IPDeurnWgvkIchHW944qjufWYF88YnOgfVsFt8dj5ndruxyX_QSPkwirIn5_gODO80') }}"/>
+</div>
+</div>
+<div>
+<span class="text-primary font-bold tracking-widest text-sm uppercase mb-4 block">Core Competency 02</span>
+<h3 class="font-headline font-bold text-4xl mb-6">Logistics &amp; Global Trade</h3>
+<p class="text-on-surface-variant text-lg mb-8">From port to warehouse, Comfydoe ensures your goods move faster, smarter, and safer. We specialize in reducing lead times through proprietary routing algorithms and tier-one partner network access.</p>
+<ul class="space-y-4">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>Global Freight Coordination</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>Real-time Supply Chain Visibility</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>Cold-Chain &amp; Specialized Cargo</span>
+</li>
+</ul>
+<button onclick="document.getElementById('contact-target').scrollIntoView({behavior: 'smooth'})" class="mt-8 btn-primary-gradient text-on-primary-fixed px-8 py-3 rounded-lg font-bold active:scale-95 transition-transform inline-flex items-center gap-2">
+    Consult Comfort
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="py-24 px-8 bg-surface-container">
+<div class="max-w-7xl mx-auto text-center mb-16">
+<h2 class="font-headline font-bold text-4xl mb-4">Trusted Excellence</h2>
+<p class="text-on-surface-variant">Hear from the leaders who have transformed their operations.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+<!-- Testimonial 1 -->
+<div class="bg-surface p-8 rounded-xl relative">
+<div class="flex gap-1 text-primary mb-6">
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-on-surface-variant mb-8 italic">"The level of strategic insight provided during our market expansion into West Africa was pivotal. Absolute professionalism."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-variant"></div>
+<div class="text-left">
+<div class="font-bold">Aurelius Thorne</div>
+<div class="text-xs text-on-surface-variant">CEO, Thorne Dynamics</div>
+</div>
+</div>
+</div>
+<!-- Testimonial 2 -->
+<div class="bg-surface p-8 rounded-xl relative">
+<div class="flex gap-1 text-primary mb-6">
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-on-surface-variant mb-8 italic">"Logistics challenges that were costing us millions were resolved in less than a quarter. A master of operational flow."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-variant"></div>
+<div class="text-left">
+<div class="font-bold">Sarah Jenkins</div>
+<div class="text-xs text-on-surface-variant">COO, Global Retail Hub</div>
+</div>
+</div>
+</div>
+<!-- Testimonial 3 -->
+<div class="bg-surface p-8 rounded-xl relative">
+<div class="flex gap-1 text-primary mb-6">
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill-1" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-on-surface-variant mb-8 italic">"Importing from complex markets became a seamless process. The compliance expertise alone is worth the investment."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-variant"></div>
+<div class="text-left">
+<div class="font-bold">Musa Al-Fayed</div>
+<div class="text-xs text-on-surface-variant">Director, Al-Fayed Trading</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact/Booking -->
+<section id="contact-target" class="py-24 px-8 bg-surface">
+<div class="max-w-4xl mx-auto bg-surface-container-high rounded-2xl overflow-hidden shadow-2xl">
+<div class="grid grid-cols-1 md:grid-cols-2">
+<div class="p-12 btn-primary-gradient text-on-primary-fixed">
+<h2 class="font-headline font-bold text-3xl mb-6">Schedule Your High-Impact Session</h2>
+<p class="mb-8 opacity-90">Ready to redefine your operational baseline? Let's discuss your global vision and how to materialize it.</p>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined">mail</span>
+<span>{{ content.contact_email | default('advisory@comfydoe.pro') }}</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined">call</span>
+<span>{{ content.contact_phone | default('+1 (555) COMFYDOE') }}</span>
+</div>
+</div>
+</div>
+<div class="p-12 bg-surface-container-high">
+<form action="{{ url_for('submit_lead') }}" class="space-y-6" method="POST">
+<div>
+<label class="block text-sm font-bold mb-2 text-primary uppercase tracking-widest">Full Name</label>
+<input name="full_name" required class="w-full bg-surface-variant border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-on-surface-variant/50" placeholder="John Doe" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-bold mb-2 text-primary uppercase tracking-widest">Business Email</label>
+<input name="email" required class="w-full bg-surface-variant border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-on-surface-variant/50" placeholder="john@company.com" type="email"/>
+</div>
+<div>
+<label class="block text-sm font-bold mb-2 text-primary uppercase tracking-widest">Interest Area</label>
+<select name="service" required class="w-full bg-surface-variant border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/20 text-on-surface appearance-none">
+<option value="Consultancy">Strategic Consultancy</option>
+<option value="Logistics">Logistics Solutions</option>
+<option value="Trade">Import/Export Advisory</option>
+<option value="Merchandise">Portfolio Management</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-bold mb-2 text-primary uppercase tracking-widest">Message / Goal</label>
+<textarea name="message" class="w-full bg-surface-variant border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/20 text-on-surface placeholder:text-on-surface-variant/50" placeholder="Briefly describe your objectives..."></textarea>
+</div>
+<button class="w-full bg-surface-container-lowest text-primary border border-primary/30 hover:bg-primary/10 transition-colors py-4 rounded-lg font-bold text-lg" type="submit">
+                                Partner with Comfydoe
+                            </button>
+</form>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#121415] w-full py-20 px-8 border-t border-outline-variant/10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto font-body text-sm">
+<div class="md:col-span-1">
+<div class="text-lg font-bold text-[#d0bb8e] mb-4">Comfydoe Professional</div>
+<p class="text-[#cec5b7] mb-6">Excellence in global trade, consultancy, and business leadership with Comfort Doe.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-[#d0bb8e] cursor-pointer hover:text-white transition-colors">public</span>
+<span class="material-symbols-outlined text-[#d0bb8e] cursor-pointer hover:text-white transition-colors">hub</span>
+<span class="material-symbols-outlined text-[#d0bb8e] cursor-pointer hover:text-white transition-colors">verified_user</span>
+</div>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Expertise</h4>
+<ul class="space-y-4 text-[#cec5b7]">
+<li><a class="hover:text-white transition-colors" href="#">Strategic Advisory</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Venture Portfolio</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Supply Chain Ops</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Company</h4>
+<ul class="space-y-4 text-[#cec5b7]">
+<li><a class="hover:text-white transition-colors" href="#">Executive Bio</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Global Presence</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-white font-bold mb-6">Legal</h4>
+<ul class="space-y-4 text-[#cec5b7]">
+<li><a class="hover:text-white transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto pt-20 text-[#cec5b7] text-xs flex justify-between items-center">
+<span>© 2024 Comfydoe. All Rights Reserved.</span>
+<span class="flex gap-6">
+<span>London</span>
+<span>Accra</span>
+<span>Dubai</span>
+</span>
+</div>
+</footer>
+</body></html>
