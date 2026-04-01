@@ -249,6 +249,54 @@
                     </div>
                 </section>
 
+                <!-- CLIENT REVIEWS SECTION -->
+                <section id="section-reviews" class="bg-surface-container rounded-2xl p-8 border border-outline-variant/10">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary">format_quote</span>
+                        </div>
+                        <div>
+                            <h3 class="font-headline font-bold text-lg text-on-surface">Client Reviews (Testimonials)</h3>
+                            <p class="text-xs text-on-surface-variant">Displayed as social proof on the homepage</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- R1 -->
+                        <div class="space-y-4 bg-surface-variant p-4 rounded-xl border border-outline-variant/20">
+                            <div>
+                                <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Review 1 Author</label>
+                                <input type="text" name="review1_author" value="{{ content.review1_author | default('Jonathan L., Global Director') }}" class="w-full bg-surface border border-outline-variant/30 rounded-lg p-3 text-sm text-on-surface focus:ring-1 focus:ring-primary/50 focus:border-primary/50">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Review 1 Text</label>
+                                <textarea name="review1_text" rows="4" class="w-full bg-surface border border-outline-variant/30 rounded-lg p-3 text-sm text-on-surface focus:ring-1 focus:ring-primary/50 focus:border-primary/50">{{ content.review1_text | default('Comfydoe completely transformed our supply chain logistics. Their strategic insights are matched only by their execution speed.') }}</textarea>
+                            </div>
+                        </div>
+                        <!-- R2 -->
+                        <div class="space-y-4 bg-surface-variant p-4 rounded-xl border border-outline-variant/20">
+                            <div>
+                                <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Review 2 Author</label>
+                                <input type="text" name="review2_author" value="{{ content.review2_author | default('Sarah K., VP of Expansion') }}" class="w-full bg-surface border border-outline-variant/30 rounded-lg p-3 text-sm text-on-surface focus:ring-1 focus:ring-primary/50 focus:border-primary/50">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Review 2 Text</label>
+                                <textarea name="review2_text" rows="4" class="w-full bg-surface border border-outline-variant/30 rounded-lg p-3 text-sm text-on-surface focus:ring-1 focus:ring-primary/50 focus:border-primary/50">{{ content.review2_text | default('Their market entry strategy for West Africa was flawless. We saw a 40% increase in regional operations within a quarter.') }}</textarea>
+                            </div>
+                        </div>
+                        <!-- R3 -->
+                        <div class="space-y-4 bg-surface-variant p-4 rounded-xl border border-outline-variant/20">
+                            <div>
+                                <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Review 3 Author</label>
+                                <input type="text" name="review3_author" value="{{ content.review3_author | default('Michael R., CEO') }}" class="w-full bg-surface border border-outline-variant/30 rounded-lg p-3 text-sm text-on-surface focus:ring-1 focus:ring-primary/50 focus:border-primary/50">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Review 3 Text</label>
+                                <textarea name="review3_text" rows="4" class="w-full bg-surface border border-outline-variant/30 rounded-lg p-3 text-sm text-on-surface focus:ring-1 focus:ring-primary/50 focus:border-primary/50">{{ content.review3_text | default('Working with Comfort Doe is an absolute masterclass in international trade. The ROI on their consultancy is undeniable.') }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Bottom Publish -->
                 <div class="flex justify-between items-center py-6">
                     <a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-bold">

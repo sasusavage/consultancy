@@ -377,6 +377,64 @@
 </div>
 </div>
 </section>
+<!-- Client Reviews -->
+<section id="reviews-target" class="py-24 px-8 bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto">
+<h2 class="font-headline font-bold text-4xl md:text-5xl mb-16 text-center">What Our Partners Say</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    
+    <!-- Review 1 -->
+    <div class="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/10 relative shadow-xl hover:-translate-y-2 transition-transform duration-300">
+        <span class="material-symbols-outlined absolute top-6 right-6 text-5xl text-primary/10" style="font-variation-settings: 'FILL' 1;">format_quote</span>
+        <div class="flex items-center gap-1 text-[#d0bb8e] mb-6">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+        </div>
+        <p class="text-on-surface-variant text-lg leading-relaxed mb-8 italic">"{{ content.review1_text | default('Comfydoe completely transformed our supply chain logistics. Their strategic insights are matched only by their execution speed.') }}"</p>
+        <div>
+            <p class="font-bold text-on-surface">{{ content.review1_author | default('Jonathan L., Global Director') }}</p>
+        </div>
+    </div>
+
+    <!-- Review 2 -->
+    <div class="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/10 relative shadow-xl hover:-translate-y-2 transition-transform duration-300">
+        <span class="material-symbols-outlined absolute top-6 right-6 text-5xl text-primary/10" style="font-variation-settings: 'FILL' 1;">format_quote</span>
+        <div class="flex items-center gap-1 text-[#d0bb8e] mb-6">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+        </div>
+        <p class="text-on-surface-variant text-lg leading-relaxed mb-8 italic">"{{ content.review2_text | default('Their market entry strategy for West Africa was flawless. We saw a 40% increase in regional operations within a quarter.') }}"</p>
+        <div>
+            <p class="font-bold text-on-surface">{{ content.review2_author | default('Sarah K., VP of Expansion') }}</p>
+        </div>
+    </div>
+
+    <!-- Review 3 -->
+    <div class="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/10 relative shadow-xl hover:-translate-y-2 transition-transform duration-300">
+        <span class="material-symbols-outlined absolute top-6 right-6 text-5xl text-primary/10" style="font-variation-settings: 'FILL' 1;">format_quote</span>
+        <div class="flex items-center gap-1 text-[#d0bb8e] mb-6">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+        </div>
+        <p class="text-on-surface-variant text-lg leading-relaxed mb-8 italic">"{{ content.review3_text | default('Working with Comfort Doe is an absolute masterclass in international trade. The ROI on their consultancy is undeniable.') }}"</p>
+        <div>
+            <p class="font-bold text-on-surface">{{ content.review3_author | default('Michael R., CEO') }}</p>
+        </div>
+    </div>
+
+</div>
+</div>
+</section>
+
 <!-- Contact/Booking -->
 <section id="contact-target" class="py-24 px-8 bg-surface">
 <div class="max-w-4xl mx-auto bg-surface-container-high rounded-2xl overflow-hidden shadow-2xl">
@@ -411,7 +469,7 @@
 <option value="Consultancy">Strategic Consultancy</option>
 <option value="Logistics">Logistics Solutions</option>
 <option value="Trade">Import/Export Advisory</option>
-<option value="Merchandise">Portfolio Management</option>
+<option value="Gen. Merchandise">General Merchandise</option>
 </select>
 </div>
 <div>

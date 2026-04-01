@@ -86,7 +86,7 @@
 <aside class="fixed left-0 top-0 z-40 flex flex-col p-6 bg-[#121415] h-screen w-72 border-r-0">
 <div class="mb-10">
 <h1 class="text-2xl font-black tracking-tighter text-[#edd7a8]">Comfydoe</h1>
-<p class="font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] mt-1">Multi-Sector Admin</p>
+<p class="font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] mt-1">Pipeline & Lead Manager</p>
 </div>
 <nav class="flex-grow space-y-2">
 <!-- Dashboard Overview (ACTIVE) -->
@@ -102,22 +102,22 @@
 <!-- Filter: Consultancy -->
 <a class="flex items-center gap-3 px-4 py-3 transition-all duration-300 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] rounded-md" href="{{ url_for('admin_dashboard', service='Consultancy') }}">
 <span class="material-symbols-outlined">chat_bubble</span>
-<span>Consultancy Inquiries</span>
+<span>Consultancy Leads</span>
 </a>
 <!-- Filter: Logistics -->
 <a class="flex items-center gap-3 px-4 py-3 transition-all duration-300 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] rounded-md" href="{{ url_for('admin_dashboard', service='Logistics') }}">
 <span class="material-symbols-outlined">local_shipping</span>
-<span>Logistics Tracking</span>
+<span>Logistics Leads</span>
 </a>
 <!-- Filter: Trade -->
 <a class="flex items-center gap-3 px-4 py-3 transition-all duration-300 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] rounded-md" href="{{ url_for('admin_dashboard', service='Trade') }}">
 <span class="material-symbols-outlined">public</span>
-<span>Global Trade Leads</span>
+<span>Import/Export Leads</span>
 </a>
 <!-- Filter: Merchandise -->
 <a class="flex items-center gap-3 px-4 py-3 transition-all duration-300 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] rounded-md" href="{{ url_for('admin_dashboard', service='Merchandise') }}">
 <span class="material-symbols-outlined">inventory_2</span>
-<span>Merchandise Inventory</span>
+<span>Gen. Merchandise Leads</span>
 </a>
 <!-- View Homepage -->
 <a class="flex items-center gap-3 px-4 py-3 transition-all duration-300 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] rounded-md" href="{{ url_for('index') }}" target="_blank">
@@ -179,7 +179,7 @@
 <h2 class="text-display-lg font-headline font-extrabold text-[#edd7a8] leading-tight -tracking-[0.03em] mb-2 uppercase">
   {% if service_filter %}{{ service_filter }} Leads{% else %}Global Trade Leads{% endif %}
 </h2>
-<p class="text-lg text-[#cec5b7] font-body max-w-xl">Curated acquisition intelligence across your multi-sector empire. Manage incoming inquiries and trade opportunities with executive precision.</p>
+<p class="text-lg text-[#cec5b7] font-body max-w-xl">Manage all incoming client requests and service inquiries from the Comfydoe homepage form. Filter your pipeline by sector to coordinate your global response.</p>
 </div>
 <div class="flex gap-4">
 <a href="{{ url_for('export_leads', search=search, service=service_filter) }}" class="px-6 py-3 rounded-md bg-surface-container shadow-lg text-primary hover:bg-[#333536] font-bold transition-all flex items-center gap-2 text-sm border border-[#4c463b]/30">
