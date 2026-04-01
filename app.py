@@ -82,6 +82,7 @@ def admin_dashboard():
     page = min(page, total_pages)
 
     recent_leads = query.order_by(Lead.created_at.desc()).offset((page - 1) * per_page).limit(per_page).all()
+    all_leads_board = query.order_by(Lead.created_at.desc()).limit(200).all()
 
     start_num = (page - 1) * per_page + 1
     end_num = min(page * per_page, filtered_count)
@@ -97,7 +98,8 @@ def admin_dashboard():
                            start_num=start_num,
                            end_num=end_num,
                            search=search,
-                           service_filter=service_filter)
+                           service_filter=service_filter,
+                           all_leads_board=all_leads_board)
 
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -160,6 +162,54 @@ def update_status(id):
         db.session.commit()
         flash('Status updated.', 'success')
     return redirect(url_for('admin_dashboard'))
+
+import csv
+from io import StringIO
+from flask import Response
+
+@app.route('/export_leads')
+@login_required
+def export_leads():
+    search = request.args.get('search', '', type=str)
+    service_filter = request.args.get('service', '', type=str)
+    query = Lead.query
+    if search:
+        query = query.filter(db.or_(Lead.full_name.ilike(f'%{search}%'), Lead.email.ilike(f'%{search}%')))
+    if service_filter:
+        query = query.filter_by(service=service_filter)
+
+    leads = query.order_by(Lead.created_at.desc()).all()
+
+    def generate():
+        data = StringIO()
+        writer = csv.writer(data)
+        writer.writerow(['ID', 'Name', 'Email', 'Service', 'Status', 'Date', 'Message'])
+        yield data.getvalue()
+        data.seek(0)
+        data.truncate(0)
+        for lead in leads:
+            writer.writerow([
+                lead.id, lead.full_name, lead.email, lead.service, lead.status, 
+                lead.created_at.strftime('%Y-%m-%d %H:%M:%S'), 
+                lead.message.replace('\r', '').replace('\n', ' ') if lead.message else ''
+            ])
+            yield data.getvalue()
+            data.seek(0)
+            data.truncate(0)
+
+    return Response(generate(), mimetype='text/csv', headers={"Content-Disposition": "attachment; filename=leads_export.csv"})
+
+@app.route('/api/update_status/<int:id>', methods=['POST'])
+@login_required
+def api_update_status(id):
+    lead = Lead.query.get_or_404(id)
+    data = request.get_json()
+    new_status = data.get('status')
+    if new_status:
+        lead.status = new_status
+        db.session.commit()
+        return jsonify({'success': True, 'status': new_status})
+    return jsonify({'success': False}), 400
 
 @app.route('/edit_lead/<int:id>', methods=['GET', 'POST'])
 @login_required

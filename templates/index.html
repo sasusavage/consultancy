@@ -91,6 +91,7 @@
         .text-gradient-gold {
             background: linear-gradient(135deg, #edd7a8 0%, #d0bb8e 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .btn-primary-gradient {
@@ -133,7 +134,7 @@
 <section class="relative min-h-screen flex items-center pt-20 px-8 overflow-hidden">
 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 <div class="lg:col-span-7 lg:pr-12">
-<h1 class="font-headline font-extrabold text-5xl md:text-7xl lg:text-8xl leading-[1.1] tracking-tighter mb-8">
+<h1 id="hero-title" class="font-headline font-extrabold text-5xl md:text-7xl lg:text-8xl leading-[1.1] tracking-tighter mb-8 opacity-0">
                         {{ content.hero_title | default('Turning Global Vision into <span class="text-gradient-gold">Operational Reality.</span>') | safe }}
 </h1>
 <p class="text-on-surface-variant text-lg md:text-xl max-w-xl mb-10 font-light leading-relaxed">
@@ -217,8 +218,8 @@
 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
 <div class="lg:col-span-6 lg:order-2">
 <h2 class="font-headline font-bold text-4xl md:text-5xl mb-8">The Vision Behind Comfydoe</h2>
-<div class="space-y-6 text-on-surface-variant text-lg leading-relaxed whitespace-pre-line">
-{{ content.about_text | default('Comfort Doe is a distinguished leader in Africa&#39;s trade and consultancy landscape. As the founder of Comfydoe, she integrates strategic insight with hands-on operational expertise to help businesses bridge the gap between local potential and global markets.') }}
+<div class="space-y-6 text-on-surface-variant text-lg leading-relaxed">
+{{ content.about_text | default('Comfort Doe is a distinguished leader in Africa&#39;s trade and consultancy landscape. As the founder of Comfydoe, she integrates strategic insight with hands-on operational expertise to help businesses bridge the gap between local potential and global markets.') | safe }}
 </div>
 <div class="grid grid-cols-3 gap-8 mt-12 border-t border-outline-variant/20 pt-8">
 <div>
@@ -471,4 +472,19 @@
 </span>
 </div>
 </footer>
+<script src="https://unpkg.com/typeit@8.7.1/dist/index.umd.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const titleEl = document.getElementById("hero-title");
+        if(titleEl) {
+            titleEl.classList.remove("opacity-0");
+            new TypeIt("#hero-title", {
+                speed: 40,
+                waitUntilVisible: true,
+                html: true,
+                cursorChar: "<span class='text-primary'>|</span>"
+            }).go();
+        }
+    });
+</script>
 </body></html>
