@@ -1,7 +1,8 @@
 """Shared pytest fixtures.
 
-Configures the app for isolated testing before importing it: an in-memory
-SQLite database, a test secret key, and a known admin password.
+Configures the app for isolated testing before importing it: a temp-file
+SQLite database and a test secret key. The admin account is seeded directly
+into the database (there is no admin password in the environment).
 """
 import os
 import tempfile
@@ -12,17 +13,34 @@ _db_fd, _db_path = tempfile.mkstemp(suffix='.db')
 os.close(_db_fd)
 os.environ.setdefault('DATABASE_URL', f'sqlite:///{_db_path}')
 os.environ.setdefault('SECRET_KEY', 'test-secret-key')
-os.environ.setdefault('ADMIN_USERNAME', 'admin')
-os.environ.setdefault('ADMIN_PASSWORD', 'test-admin-pass')
 
 import pytest
+from werkzeug.security import generate_password_hash
 
-from app import app as flask_app, db  # noqa: E402
+from app import app as flask_app, db, limiter  # noqa: E402
+from models import User  # noqa: E402
+
+ADMIN_PASSWORD = 'test-admin-pass'
+
+# Rate limiting would otherwise make tests order-dependent (many /login calls
+# across the suite trip the per-minute limit). Disable it for tests.
+limiter.enabled = False
 
 
 @pytest.fixture
 def app():
     flask_app.config.update(TESTING=True)
+    with flask_app.app_context():
+        db.create_all()
+        # Always reset the admin to a known password so tests are independent
+        # of each other (e.g. the change-password tests).
+        admin = User.query.filter_by(username='admin').first()
+        if admin:
+            admin.password = generate_password_hash(ADMIN_PASSWORD)
+        else:
+            db.session.add(User(username='admin',
+                                password=generate_password_hash(ADMIN_PASSWORD)))
+        db.session.commit()
     yield flask_app
 
 
@@ -43,5 +61,5 @@ def csrf_client(app):
 @pytest.fixture
 def auth_client(client):
     """A client already logged in as admin."""
-    client.post('/login', data={'username': 'admin', 'password': 'test-admin-pass'})
+    client.post('/login', data={'username': 'admin', 'password': ADMIN_PASSWORD})
     return client

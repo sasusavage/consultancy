@@ -34,7 +34,10 @@
       <span class="material-symbols-outlined">visibility</span> View Live Site
     </a>
   </nav>
-  <div class="mt-auto border-t border-outline-variant/10 pt-4">
+  <div class="mt-auto border-t border-outline-variant/10 pt-4 space-y-1">
+    <a href="{{ url_for('change_password') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold transition-colors {% if nav == 'password' %}bg-primary text-on-primary-fixed{% else %}text-on-surface-variant hover:text-primary hover:bg-surface-container{% endif %}">
+      <span class="material-symbols-outlined">lock</span> Change Password
+    </a>
     <a href="{{ url_for('logout') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold text-error hover:bg-error-container/20 transition-colors">
       <span class="material-symbols-outlined">logout</span> Logout
     </a>

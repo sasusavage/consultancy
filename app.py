@@ -306,6 +306,28 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+        current = request.form.get('current_password', '')
+        new = request.form.get('new_password', '')
+        confirm = request.form.get('confirm_password', '')
+
+        if not check_password_hash(current_user.password, current):
+            flash('Your current password is incorrect.', 'error')
+        elif len(new) < 8:
+            flash('New password must be at least 8 characters.', 'error')
+        elif new != confirm:
+            flash('New passwords do not match.', 'error')
+        else:
+            current_user.password = generate_password_hash(new)
+            db.session.commit()
+            flash('Password updated successfully.', 'success')
+            return redirect(url_for('admin_dashboard'))
+
+    return render_template('change_password.html')
+
 @app.errorhandler(400)
 def bad_request(e):
     return render_template('error.html', code=400, title='Bad Request',
@@ -334,41 +356,56 @@ def server_error(e):
                            message="An unexpected error occurred on our end. Please try again later."), 500
 
 
-def create_admin_if_not_exists():
+def ensure_tables():
+    """Create tables if they don't exist yet (convenience for first boot).
+
+    Schema is otherwise owned by Alembic migrations (`flask db upgrade`).
+    Admin accounts are NOT created here — there is no password in the
+    environment. Create the first admin with `flask create-admin`.
+    """
     with app.app_context():
-        # Schema is owned by Alembic migrations (flask db upgrade). As a
-        # convenience for zero-config local dev, create tables if they're
-        # missing — a no-op once migrations have been applied.
         from sqlalchemy import inspect
         if not inspect(db.engine).has_table(User.__tablename__):
             db.create_all()
-        admin_username = os.getenv('ADMIN_USERNAME', 'admin')
-        admin_password = os.getenv('ADMIN_PASSWORD')
-        if not admin_password:
-            if os.getenv('FLASK_ENV') == 'production':
-                raise RuntimeError(
-                    "ADMIN_PASSWORD must be set in production to create the admin user."
-                )
-            admin_password = 'admin'  # local dev fallback only
-            app.logger.warning(
-                "ADMIN_PASSWORD not set; using insecure default password for local dev."
-            )
-        if not User.query.filter_by(username=admin_username).first():
-            user = User(
-                username=admin_username,
-                password=generate_password_hash(admin_password),
-            )
-            db.session.add(user)
-            db.session.commit()
 
-# Ensure tables and admin user exist whether run locally or via Gunicorn.
-# Skipped during `flask db ...` migration commands so Alembic can manage the
-# schema cleanly. Wrapped so a transient DB outage at boot doesn't crash the
-# whole web process (which would otherwise trigger a container restart loop) —
-# the server still starts and the bootstrap retries on the next boot.
+
+import click
+
+
+@app.cli.command('create-admin')
+@click.option('--username', prompt='Username', default='admin', show_default=True)
+@click.option('--password', prompt='Password', hide_input=True,
+              confirmation_prompt=True)
+def create_admin_command(username, password):
+    """Create or update an admin user.
+
+    Interactive:   flask create-admin
+    Scripted:      flask create-admin --username admin --password 'secret'
+
+    The password is hashed and stored only in the database.
+    """
+    username = (username or '').strip() or 'admin'
+    if not password:
+        click.echo('[ERROR] Password cannot be empty.')
+        return
+    user = User.query.filter_by(username=username).first()
+    if user:
+        user.password = generate_password_hash(password)
+        db.session.commit()
+        click.echo(f"[OK] Password updated for existing user '{username}'.")
+    else:
+        db.session.add(User(username=username, password=generate_password_hash(password)))
+        db.session.commit()
+        click.echo(f"[OK] Admin user '{username}' created.")
+
+
+# Ensure tables exist whether run locally or via Gunicorn. Skipped during
+# `flask db ...` migration commands so Alembic can manage the schema cleanly.
+# Wrapped so a transient DB outage at boot doesn't crash the web process
+# (which would otherwise trigger a container restart loop).
 if os.getenv('SKIP_BOOTSTRAP') != '1':
     try:
-        create_admin_if_not_exists()
+        ensure_tables()
     except Exception as exc:  # noqa: BLE001
         app.logger.error("Startup DB bootstrap failed (continuing): %s", exc)
 

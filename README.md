@@ -27,7 +27,18 @@ Run the app:
 python app.py                    # http://localhost:5007
 ```
 
-If `ADMIN_PASSWORD` isn't set, a local-only `admin` / `admin` user is created (a warning is logged). Set `ADMIN_PASSWORD` for anything real.
+## Admin account
+
+There is **no admin password in the environment**. Credentials live in the
+database, hashed. Create the first admin once:
+
+```bash
+flask create-admin        # prompts for username + password
+```
+
+Re-running it for an existing username updates that password. You can also
+change your password from the admin dashboard (**Change Password** in the
+sidebar) once logged in.
 
 ## Tailwind CSS
 
@@ -73,6 +84,6 @@ validation/anti-spam, auth, lead management, CMS whitelist, CSRF and uploads.
 |------------------|-----------------|--------------------------------------------------|
 | `DATABASE_URL`   | prod            | `postgres://` is auto-rewritten to `postgresql://` |
 | `SECRET_KEY`     | **prod (hard)** | App refuses to start in production without it    |
-| `ADMIN_USERNAME` | no              | Defaults to `admin`                              |
-| `ADMIN_PASSWORD` | **prod (hard)** | Required in production to create the admin user  |
-| `FLASK_ENV`      | prod            | Set to `production` to enforce the checks above  |
+| `FLASK_ENV`      | prod            | Set to `production` to enforce the SECRET_KEY check |
+
+Admin credentials are **not** environment variables — see *Admin account* above (`flask create-admin`).
