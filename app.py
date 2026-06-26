@@ -363,10 +363,14 @@ def create_admin_if_not_exists():
 
 # Ensure tables and admin user exist whether run locally or via Gunicorn.
 # Skipped during `flask db ...` migration commands so Alembic can manage the
-# schema cleanly.
+# schema cleanly. Wrapped so a transient DB outage at boot doesn't crash the
+# whole web process (which would otherwise trigger a container restart loop) —
+# the server still starts and the bootstrap retries on the next boot.
 if os.getenv('SKIP_BOOTSTRAP') != '1':
-    with app.app_context():
+    try:
         create_admin_if_not_exists()
+    except Exception as exc:  # noqa: BLE001
+        app.logger.error("Startup DB bootstrap failed (continuing): %s", exc)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5007)
