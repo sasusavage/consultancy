@@ -1,6 +1,10 @@
 import os
+import re
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_wtf.csrf import CSRFProtect
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 
@@ -9,7 +13,14 @@ from models import db, Lead, User
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY', 'super_secret_key')
+
+# Secret key is required; fall back only in non-production/local dev.
+secret_key = os.getenv('SECRET_KEY')
+if not secret_key:
+    if os.getenv('FLASK_ENV') == 'production':
+        raise RuntimeError("SECRET_KEY environment variable must be set in production.")
+    secret_key = 'dev-only-insecure-key'
+app.secret_key = secret_key
 
 database_url = os.getenv('DATABASE_URL', 'sqlite:///comfort.db')
 if database_url.startswith("postgres://"):
@@ -19,9 +30,17 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
+# CSRF protection for all POST forms
+csrf = CSRFProtect(app)
+
+# Rate limiting (in-memory by default; suitable for single-process deploys)
+limiter = Limiter(key_func=get_remote_address, app=app, default_limits=[])
+
 login_manager = LoginManager()
 login_manager.login_view = 'login'
 login_manager.init_app(app)
+
+EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -34,16 +53,35 @@ def index():
     content = {c.key: c.value for c in content_list}
     return render_template('index.html', content=content)
 
+VALID_SERVICES = {'Consultancy', 'Logistics', 'Trade', 'Merchandise'}
+
 @app.route('/submit_lead', methods=['POST'])
+@limiter.limit("5 per minute; 30 per hour")
 def submit_lead():
-    full_name = request.form.get('full_name')
-    email = request.form.get('email')
-    service = request.form.get('service')
-    message = request.form.get('message', '')
-    
+    full_name = (request.form.get('full_name') or '').strip()
+    email = (request.form.get('email') or '').strip()
+    service = (request.form.get('service') or '').strip()
+    message = (request.form.get('message', '') or '').strip()
+
+    # Honeypot: bots fill hidden fields humans never see.
+    if request.form.get('website'):
+        return redirect(url_for('index'))
+
     if not full_name or not email or not service:
         flash('Please fill out all required fields.', 'error')
         return redirect(url_for('index'))
+
+    if not EMAIL_RE.match(email):
+        flash('Please enter a valid email address.', 'error')
+        return redirect(url_for('index'))
+
+    if service not in VALID_SERVICES:
+        flash('Please select a valid service.', 'error')
+        return redirect(url_for('index'))
+
+    full_name = full_name[:150]
+    email = email[:150]
+    message = message[:2000]
 
     lead = Lead(full_name=full_name, email=email, service=service, message=message)
     db.session.add(lead)
@@ -105,7 +143,17 @@ UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'}
+# SVG intentionally excluded: it can carry embedded JavaScript (stored XSS).
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+
+# Only these keys may be written to SiteContent via the CMS editor.
+ALLOWED_CONTENT_KEYS = {
+    'hero_title', 'hero_subtitle', 'about_text', 'about_quote',
+    'contact_email', 'contact_phone',
+    'review1_author', 'review1_text',
+    'review2_author', 'review2_text',
+    'review3_author', 'review3_text',
+}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -115,8 +163,10 @@ def allowed_file(filename):
 def edit_content():
     from models import SiteContent
     if request.method == 'POST':
-        # Handle text fields
+        # Handle text fields (only whitelisted keys)
         for key, val in request.form.items():
+            if key not in ALLOWED_CONTENT_KEYS:
+                continue
             if val is not None and val.strip() != "":
                 item = SiteContent.query.filter_by(key=key).first()
                 if item:
@@ -236,6 +286,7 @@ def delete_lead(id):
     return redirect(url_for('admin_dashboard'))
 
 @app.route('/login', methods=['GET', 'POST'])
+@limiter.limit("10 per minute; 50 per hour", methods=['POST'])
 def login():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -256,8 +307,22 @@ def logout():
 def create_admin_if_not_exists():
     with app.app_context():
         db.create_all()
-        if not User.query.filter_by(username='admin').first():
-            user = User(username='admin', password=generate_password_hash('admin'))
+        admin_username = os.getenv('ADMIN_USERNAME', 'admin')
+        admin_password = os.getenv('ADMIN_PASSWORD')
+        if not admin_password:
+            if os.getenv('FLASK_ENV') == 'production':
+                raise RuntimeError(
+                    "ADMIN_PASSWORD must be set in production to create the admin user."
+                )
+            admin_password = 'admin'  # local dev fallback only
+            app.logger.warning(
+                "ADMIN_PASSWORD not set; using insecure default password for local dev."
+            )
+        if not User.query.filter_by(username=admin_username).first():
+            user = User(
+                username=admin_username,
+                password=generate_password_hash(admin_password),
+            )
             db.session.add(user)
             db.session.commit()
 

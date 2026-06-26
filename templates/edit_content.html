@@ -132,6 +132,7 @@
             {% endwith %}
 
             <form id="cms-form" action="{{ url_for('edit_content') }}" method="POST" enctype="multipart/form-data" class="space-y-12">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <!-- HERO SECTION -->
                 <section id="section-hero" class="bg-surface-container rounded-2xl p-8 border border-outline-variant/10">

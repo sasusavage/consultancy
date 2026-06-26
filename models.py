@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-from datetime import datetime
+from datetime import datetime, timezone
 
 db = SQLAlchemy()
 
@@ -12,7 +12,7 @@ class Lead(db.Model):
     service = db.Column(db.String(100), nullable=False)
     message = db.Column(db.Text, nullable=True)
     status = db.Column(db.String(50), default='New', nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
