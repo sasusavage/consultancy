@@ -1,0 +1,21 @@
+# Keep the image small and clean
+.git
+.gitignore
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+node_modules/
+tests/
+.pytest_cache/
+instance/
+*.sqlite3
+*.db
+.env
+.env.*
+!.env.example
+_edgeprofile/
+*.log
+.vscode/
+.idea/
