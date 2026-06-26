@@ -150,11 +150,37 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 # Only these keys may be written to SiteContent via the CMS editor.
 ALLOWED_CONTENT_KEYS = {
-    'hero_title', 'hero_subtitle', 'about_text', 'about_quote',
-    'contact_email', 'contact_phone',
+    # Hero
+    'hero_title', 'hero_subtitle',
+    # Four Pillars
+    'pillars_heading', 'pillars_subheading',
+    'pillar1_title', 'pillar1_text',
+    'pillar2_title', 'pillar2_text',
+    'pillar3_title', 'pillar3_text',
+    'pillar4_title', 'pillar4_text',
+    # About + stats
+    'about_heading', 'about_text', 'about_quote',
+    'stat1_value', 'stat1_label',
+    'stat2_value', 'stat2_label',
+    'stat3_value', 'stat3_label',
+    # Service deep dives
+    'dive1_label', 'dive1_title', 'dive1_text',
+    'dive1_bullet1', 'dive1_bullet2', 'dive1_bullet3',
+    'dive2_label', 'dive2_title', 'dive2_text',
+    'dive2_bullet1', 'dive2_bullet2', 'dive2_bullet3',
+    # Testimonials (Trusted Excellence)
+    'testimonials_heading', 'testimonials_subheading',
+    'testimonial1_text', 'testimonial1_name', 'testimonial1_role',
+    'testimonial2_text', 'testimonial2_name', 'testimonial2_role',
+    'testimonial3_text', 'testimonial3_name', 'testimonial3_role',
+    # Reviews
+    'reviews_heading',
     'review1_author', 'review1_text',
     'review2_author', 'review2_text',
     'review3_author', 'review3_text',
+    # Contact
+    'contact_heading', 'contact_subheading',
+    'contact_email', 'contact_phone',
 }
 
 def allowed_file(filename):
