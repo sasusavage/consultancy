@@ -1,419 +1,230 @@
-<!DOCTYPE html>
+{% extends "admin_base.html" %}
+{% set active_nav = 'dashboard' %}
+{% block title %}Leads{% endblock %}
 
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta name="csrf-token" content="{{ csrf_token() }}"/>
-<title>Comfydoe | Global Trade Leads</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="{{ url_for('static', filename='css/app.css') }}" rel="stylesheet"/>
-<style>
-        body {
-            background-color: #121415;
-            color: #e2e2e3;
-        }
-    </style>
-</head>
-<body class="font-body selection:bg-primary-container selection:text-on-primary-container">
-<!-- SideNavBar Component -->
-<aside id="sidebar" class="fixed left-0 top-0 z-[60] flex flex-col p-6 bg-[#121415] h-screen w-72 border-r-0 transition-transform duration-300 -translate-x-full lg:translate-x-0 shadow-2xl lg:shadow-none">
-<div class="flex lg:hidden justify-end mb-4">
-    <button onclick="toggleSidebar()" class="p-2 text-on-surface-variant hover:text-primary transition-colors">
-        <span class="material-symbols-outlined">close</span>
-    </button>
-</div>
-<div class="mb-10">
-<h1 class="text-2xl font-black tracking-tighter text-[#edd7a8]">Comfydoe</h1>
-<p class="font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] mt-1">Pipeline & Lead Manager</p>
-</div>
-<nav class="flex-grow space-y-2">
-<!-- Dashboard Overview (ACTIVE) -->
-<a class="flex items-center gap-3 px-4 py-3 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#251a00] bg-gradient-to-br from-[#edd7a8] to-[#d0bb8e] rounded-md shadow-[0_0_15px_rgba(208,187,142,0.2)]" href="{{ url_for('admin_dashboard') }}">
-<span class="material-symbols-outlined">dashboard</span>
-<span>Dashboard Overview</span>
-</a>
-<!-- Edit Homepage -->
-<a class="flex items-center gap-3 px-4 py-3 transition-all duration-300 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] rounded-md" href="{{ url_for('edit_content') }}">
-<span class="material-symbols-outlined">edit_document</span>
-<span>Edit Homepage</span>
-</a>
-<!-- Filter: Consultancy -->
-<a class="flex items-center gap-3 px-4 py-3 transition-all duration-300 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] rounded-md" href="{{ url_for('admin_dashboard', service='Consultancy') }}">
-<span class="material-symbols-outlined">chat_bubble</span>
-<span>Consultancy Leads</span>
-</a>
-<!-- Filter: Logistics -->
-<a class="flex items-center gap-3 px-4 py-3 transition-all duration-300 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] rounded-md" href="{{ url_for('admin_dashboard', service='Logistics') }}">
-<span class="material-symbols-outlined">local_shipping</span>
-<span>Logistics Leads</span>
-</a>
-<!-- Filter: Trade -->
-<a class="flex items-center gap-3 px-4 py-3 transition-all duration-300 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] rounded-md" href="{{ url_for('admin_dashboard', service='Trade') }}">
-<span class="material-symbols-outlined">public</span>
-<span>Import/Export Leads</span>
-</a>
-<!-- Filter: Merchandise -->
-<a class="flex items-center gap-3 px-4 py-3 transition-all duration-300 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] rounded-md" href="{{ url_for('admin_dashboard', service='Merchandise') }}">
-<span class="material-symbols-outlined">inventory_2</span>
-<span>Gen. Merchandise Leads</span>
-</a>
-<!-- View Homepage -->
-<a class="flex items-center gap-3 px-4 py-3 transition-all duration-300 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] rounded-md" href="{{ url_for('index') }}" target="_blank">
-<span class="material-symbols-outlined">visibility</span>
-<span>View Live Site</span>
-</a>
-</nav>
-<div class="mt-auto border-t border-[#4c463b]/15 pt-6 space-y-2">
-<a class="flex items-center gap-3 px-4 py-3 transition-all duration-300 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#cec5b7] hover:text-[#edd7a8] hover:bg-[#1e2021] rounded-md" href="{{ url_for('edit_content') }}">
-<span class="material-symbols-outlined">settings</span>
-<span>Settings</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 transition-all duration-300 font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-sm text-[#ffb4ab] hover:bg-[#93000a]/20 rounded-md" href="{{ url_for('logout') }}">
-<span class="material-symbols-outlined">logout</span>
-<span>Logout</span>
-</a>
-</div>
-</aside>
-
-<!-- Overlay for mobile sidebar -->
-<div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-[55] hidden lg:hidden backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
-
-<!-- Main Content Area -->
-<main class="lg:ml-72 min-h-screen transition-all">
-<!-- TopNavBar Component -->
-<header class="flex justify-between items-center w-full px-4 lg:px-8 py-4 sticky top-0 z-30 bg-[#333536]/60 backdrop-blur-xl border-b border-[#4c463b]/15 shadow-[0_4px_32px_rgba(0,0,0,0.06)]">
-<div class="flex items-center gap-4 flex-1">
-    <!-- Mobile Menu Toggle -->
-    <button onclick="toggleSidebar()" class="lg:hidden p-2 bg-surface-container rounded-lg text-primary shadow-lg border border-outline-variant/10">
-        <span class="material-symbols-outlined">menu</span>
-    </button>
-    <!-- FUNCTIONAL Search Bar -->
-<form action="{{ url_for('admin_dashboard') }}" method="GET" class="relative w-full max-w-md focus-within:ring-1 focus-within:ring-[#d0bb8e]/20 rounded-lg">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#cec5b7] text-sm">search</span>
-<input name="search" value="{{ search }}" class="w-full bg-[#1a1c1d] border-none text-[#edd7a8] pl-10 pr-4 py-2 text-sm rounded-lg focus:ring-1 focus:ring-primary/30" placeholder="Search by name or email..." type="text"/>
-{% if service_filter %}<input type="hidden" name="service" value="{{ service_filter }}">{% endif %}
+{% block header %}
+<form action="{{ url_for('admin_dashboard') }}" method="GET" class="relative w-full max-w-md">
+  <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-base">search</span>
+  <input name="search" value="{{ search }}" placeholder="Search name or email..." type="text"
+         class="w-full bg-surface-container border border-outline-variant/20 text-on-surface pl-10 pr-4 py-2 text-sm rounded-lg focus:ring-1 focus:ring-primary/40"/>
+  {% if service_filter %}<input type="hidden" name="service" value="{{ service_filter }}">{% endif %}
 </form>
-</div>
-<div class="flex items-center gap-6">
-<a href="{{ url_for('logout') }}" class="text-[#cec5b7] hover:text-[#ffb4ab] transition-colors flex items-center gap-1" title="Logout">
-<span class="material-symbols-outlined">logout</span>
-</a>
-<div class="hidden sm:flex items-center gap-3">
-<div class="text-right">
-<p class="text-sm font-bold text-[#edd7a8] font-headline tracking-tight">Executive Admin</p>
-<p class="text-xs text-[#cec5b7]">Comfydoe Global</p>
-</div>
-<img alt="Admin User Avatar" class="w-10 h-10 rounded-full border border-[#d0bb8e]/30 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0t62GwzX5p7NHwXcdgdeerffvX-W02MhQZL8Zt3iFTjI0lWNTvj4ZeEr7peCz5RrhGfx1x3HLar8lQHZ-CqtjDd9i9dEuZeu8q_s90EnNN5xxyDEeFzfZDS8H1Qo_Pr_wIlicbZrsL0NoE-L6yGpxKMlZJGCUbjeyKM8_MSb5rXXkqyhOeUNu0fJmsO06eoyHq1VIGpHdVTffCuWQ5ZYLqkHKw_pcMn5V1MMLi3SWcmn37i9Ejekv2hWR1sHWDEyqKK7TUE4Xw8s"/>
-</div>
-</div>
-</header>
-<!-- Content Canvas -->
-<div class="p-4 lg:p-12">
+{% endblock %}
 
-<!-- Flash Messages -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div class="mb-6 p-4 rounded-lg font-bold text-sm {% if category == 'error' %}bg-[#93000a]/20 text-[#ffb4ab]{% else %}bg-[#4c463b]/20 text-[#dac497]{% endif %}">
-        {{ message }}
-      </div>
+{% block content %}
+
+<!-- Title + actions -->
+<div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-8">
+  <div>
+    <h2 class="text-3xl font-headline font-extrabold text-primary tracking-tight">
+      {% if service_filter %}{{ service_filter }} Leads{% else %}All Leads{% endif %}
+    </h2>
+    <p class="text-sm text-on-surface-variant mt-1">Manage inquiries from the homepage contact form.</p>
+  </div>
+  <div class="flex gap-3">
+    <a href="{{ url_for('export_leads', search=search, service=service_filter) }}"
+       class="px-4 py-2.5 rounded-lg bg-surface-container text-primary hover:bg-surface-container-high font-bold text-sm flex items-center gap-2 border border-outline-variant/20">
+      <span class="material-symbols-outlined text-lg">download</span> Export CSV
+    </a>
+    {% if service_filter or search %}
+    <a href="{{ url_for('admin_dashboard') }}"
+       class="px-4 py-2.5 rounded-lg bg-primary text-on-primary-fixed font-bold text-sm flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg">filter_alt_off</span> Clear
+    </a>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Stat cards -->
+<div class="grid grid-cols-3 gap-4 mb-8">
+  <div class="bg-surface-container-low p-5 rounded-xl">
+    <p class="text-xs font-black uppercase tracking-widest text-primary mb-2">Total</p>
+    <h3 class="text-3xl font-headline font-extrabold text-on-surface">{{ total_leads }}</h3>
+  </div>
+  <div class="bg-surface-container-low p-5 rounded-xl">
+    <p class="text-xs font-black uppercase tracking-widest text-tertiary mb-2">New</p>
+    <h3 class="text-3xl font-headline font-extrabold text-on-surface">{{ new_leads }}</h3>
+  </div>
+  <div class="bg-surface-container-low p-5 rounded-xl">
+    <p class="text-xs font-black uppercase tracking-widest text-error mb-2">Urgent</p>
+    <h3 class="text-3xl font-headline font-extrabold text-on-surface">{{ urgent_leads }}</h3>
+  </div>
+</div>
+
+<!-- Filters + view toggle -->
+<div class="flex flex-col md:flex-row justify-between gap-3 mb-6">
+  <div class="bg-surface-container-low rounded-lg p-1 flex items-center gap-1 overflow-x-auto">
+    {% set filters = [('', 'All'), ('Consultancy', 'Consultancy'), ('Logistics', 'Logistics'), ('Trade', 'Import/Export'), ('Merchandise', 'Merchandise')] %}
+    {% for val, label in filters %}
+    <a href="{{ url_for('admin_dashboard', service=val, search=search) }}"
+       class="px-4 py-2 rounded-md text-sm font-bold whitespace-nowrap transition-colors {% if service_filter == val %}bg-primary text-on-primary-fixed{% else %}text-on-surface-variant hover:bg-surface-container{% endif %}">{{ label }}</a>
     {% endfor %}
+  </div>
+  <div class="flex bg-surface-container-low p-1 rounded-lg shrink-0">
+    <button id="btn-table-view" onclick="switchView('table')" class="p-2 rounded-md bg-primary text-on-primary-fixed flex items-center" title="Table"><span class="material-symbols-outlined">table_chart</span></button>
+    <button id="btn-kanban-view" onclick="switchView('kanban')" class="p-2 rounded-md text-on-surface-variant hover:text-on-surface flex items-center" title="Board"><span class="material-symbols-outlined">view_kanban</span></button>
+  </div>
+</div>
+
+<!-- Table view -->
+<div id="view-table" class="bg-surface-container rounded-xl overflow-x-auto">
+  <table class="w-full text-left">
+    <thead>
+      <tr class="border-b border-outline-variant/10 text-on-surface-variant">
+        <th class="px-5 py-4 font-headline font-bold text-xs uppercase tracking-widest">Client</th>
+        <th class="px-5 py-4 font-headline font-bold text-xs uppercase tracking-widest">Service</th>
+        <th class="px-5 py-4 font-headline font-bold text-xs uppercase tracking-widest">Date</th>
+        <th class="px-5 py-4 font-headline font-bold text-xs uppercase tracking-widest">Status</th>
+        <th class="px-5 py-4 font-headline font-bold text-xs uppercase tracking-widest text-right">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-outline-variant/10">
+      {% for lead in recent_leads %}
+      <tr class="group hover:bg-surface-container-low transition-colors">
+        <td class="px-5 py-4">
+          <p class="font-bold text-on-surface text-sm">{{ lead.full_name }}</p>
+          <p class="text-xs text-on-surface-variant">{{ lead.email }}</p>
+        </td>
+        <td class="px-5 py-4"><span class="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-tight">{{ lead.service }}</span></td>
+        <td class="px-5 py-4 text-sm text-on-surface-variant">{{ lead.created_at.strftime('%b %d, %Y') }}</td>
+        <td class="px-5 py-4">
+          <span class="inline-flex items-center gap-2 text-xs font-bold uppercase
+            {% if lead.status == 'Urgent' %}text-error{% elif lead.status == 'Processing' %}text-tertiary{% elif lead.status == 'Qualified' %}text-primary{% else %}text-on-surface-variant{% endif %}">
+            <span class="w-2 h-2 rounded-full {% if lead.status == 'Urgent' %}bg-error{% elif lead.status == 'Processing' %}bg-tertiary{% elif lead.status == 'Qualified' %}bg-primary{% else %}bg-secondary{% endif %}"></span>
+            {{ lead.status }}
+          </span>
+        </td>
+        <td class="px-5 py-4 text-right">
+          <div class="flex justify-end gap-1 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+            <form action="{{ url_for('update_status', id=lead.id) }}" method="POST" class="inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <input type="hidden" name="status" value="Qualified">
+              <button type="submit" title="Mark Qualified" class="p-2 text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-lg">check_circle</span></button>
+            </form>
+            <form action="{{ url_for('update_status', id=lead.id) }}" method="POST" class="inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <input type="hidden" name="status" value="Urgent">
+              <button type="submit" title="Mark Urgent" class="p-2 text-on-surface-variant hover:text-error"><span class="material-symbols-outlined text-lg">priority_high</span></button>
+            </form>
+            <a href="{{ url_for('edit_lead', id=lead.id) }}" title="Edit" class="p-2 text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-lg">edit</span></a>
+            <form action="{{ url_for('delete_lead', id=lead.id) }}" method="POST" class="inline" onsubmit="return confirm('Delete this lead permanently?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" title="Delete" class="p-2 text-on-surface-variant hover:text-error"><span class="material-symbols-outlined text-lg">delete</span></button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="px-5 py-12 text-center text-on-surface-variant">
+        {% if search %}No leads matching "<span class="text-primary font-bold">{{ search }}</span>".{% elif service_filter %}No {{ service_filter }} leads.{% else %}No leads yet.{% endif %}
+      </td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Pagination -->
+  {% if total_pages > 1 %}
+  <div class="px-5 py-4 flex justify-between items-center border-t border-outline-variant/10">
+    <p class="text-sm text-on-surface-variant">Showing <span class="text-primary font-bold">{{ start_num }}–{{ end_num }}</span> of {{ filtered_count }}</p>
+    <div class="flex items-center gap-1">
+      {% if page > 1 %}
+      <a href="{{ url_for('admin_dashboard', page=page-1, service=service_filter, search=search) }}" class="w-8 h-8 rounded-md flex items-center justify-center border border-outline-variant/30 text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-sm">chevron_left</span></a>
+      {% endif %}
+      <span class="px-3 text-sm font-bold text-on-surface-variant">Page {{ page }} / {{ total_pages }}</span>
+      {% if page < total_pages %}
+      <a href="{{ url_for('admin_dashboard', page=page+1, service=service_filter, search=search) }}" class="w-8 h-8 rounded-md flex items-center justify-center border border-outline-variant/30 text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-sm">chevron_right</span></a>
+      {% endif %}
+    </div>
+  </div>
   {% endif %}
-{% endwith %}
-<div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
-<div class="max-w-2xl">
-<h2 class="text-display-lg font-headline font-extrabold text-[#edd7a8] leading-tight -tracking-[0.03em] mb-2 uppercase">
-  {% if service_filter %}{{ service_filter }} Leads{% else %}Global Trade Leads{% endif %}
-</h2>
-<p class="text-lg text-[#cec5b7] font-body max-w-xl">Manage all incoming client requests and service inquiries from the Comfydoe homepage form. Filter your pipeline by sector to coordinate your global response.</p>
-</div>
-<div class="flex gap-4">
-<a href="{{ url_for('export_leads', search=search, service=service_filter) }}" class="px-6 py-3 rounded-md bg-surface-container shadow-lg text-primary hover:bg-[#333536] font-bold transition-all flex items-center gap-2 text-sm border border-[#4c463b]/30">
-  <span class="material-symbols-outlined text-lg">download</span> Export CSV
-</a>
-{% if service_filter or search %}
-<a href="{{ url_for('admin_dashboard') }}" class="px-6 py-3 rounded-md bg-gradient-to-br from-[#edd7a8] to-[#d0bb8e] text-[#251a00] font-bold shadow-[0_4px_20px_rgba(208,187,142,0.2)] hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2">
-  <span class="material-symbols-outlined">filter_alt_off</span> Clear Filters
-</a>
-{% endif %}
-</div>
 </div>
 
-<!-- FUNCTIONAL Filter Buttons -->
-<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
-<div class="bg-surface-container-low rounded-xl p-2 flex items-center gap-1 overflow-x-auto max-w-full">
-<a href="{{ url_for('admin_dashboard', search=search) }}" class="px-6 py-2 rounded-lg {% if not service_filter %}bg-primary text-on-primary-fixed{% else %}text-on-surface-variant hover:bg-surface-container-highest{% endif %} font-bold text-sm whitespace-nowrap transition-colors">All</a>
-<a href="{{ url_for('admin_dashboard', service='Consultancy', search=search) }}" class="px-6 py-2 rounded-lg {% if service_filter == 'Consultancy' %}bg-primary text-on-primary-fixed{% else %}text-on-surface-variant hover:bg-surface-container-highest{% endif %} font-semibold text-sm whitespace-nowrap transition-colors">Consultancy</a>
-<a href="{{ url_for('admin_dashboard', service='Logistics', search=search) }}" class="px-6 py-2 rounded-lg {% if service_filter == 'Logistics' %}bg-primary text-on-primary-fixed{% else %}text-on-surface-variant hover:bg-surface-container-highest{% endif %} font-semibold text-sm whitespace-nowrap transition-colors">Logistics</a>
-<a href="{{ url_for('admin_dashboard', service='Trade', search=search) }}" class="px-6 py-2 rounded-lg {% if service_filter == 'Trade' %}bg-primary text-on-primary-fixed{% else %}text-on-surface-variant hover:bg-surface-container-highest{% endif %} font-semibold text-sm whitespace-nowrap transition-colors">Import/Export</a>
-<a href="{{ url_for('admin_dashboard', service='Gen. Merchandise', search=search) }}" class="px-6 py-2 rounded-lg {% if service_filter == 'Gen. Merchandise' %}bg-primary text-on-primary-fixed{% else %}text-on-surface-variant hover:bg-surface-container-highest{% endif %} font-semibold text-sm whitespace-nowrap transition-colors">Gen. Merchandise</a>
-</div>
-<!-- View Toggles -->
-<div class="flex bg-surface-container-low p-1 rounded-lg shrink-0 border border-outline-variant/10">
-    <button id="btn-table-view" onclick="switchView('table')" class="p-2 rounded-md bg-primary text-on-primary-fixed flex items-center shadow transition-all" title="Table View"><span class="material-symbols-outlined">table_chart</span></button>
-    <button id="btn-kanban-view" onclick="switchView('kanban')" class="p-2 rounded-md text-on-surface-variant hover:text-on-surface flex items-center transition-all" title="Kanban Board View"><span class="material-symbols-outlined">view_kanban</span></button>
-</div>
-</div>
-
-<!-- Table Container -->
-<div id="view-table" class="bg-surface-container rounded-2xl overflow-x-auto shadow-2xl relative">
-<div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
-<table class="w-full text-left border-collapse">
-<thead>
-<tr class="bg-surface-container-highest/30">
-<th class="px-4 lg:px-8 py-5 font-headline font-bold text-[#edd7a8] text-xs uppercase tracking-widest border-none">Client Name</th>
-<th class="px-4 lg:px-8 py-5 font-headline font-bold text-[#edd7a8] text-xs uppercase tracking-widest border-none">Service Type</th>
-<th class="px-4 lg:px-8 py-5 font-headline font-bold text-[#edd7a8] text-xs uppercase tracking-widest border-none">Lead Date</th>
-<th class="px-4 lg:px-8 py-5 font-headline font-bold text-[#edd7a8] text-xs uppercase tracking-widest border-none">Status</th>
-<th class="px-4 lg:px-8 py-5 font-headline font-bold text-[#edd7a8] text-xs uppercase tracking-widest border-none text-right">Quick Action</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-[#4c463b]/10">
-{% for lead in recent_leads %}
-<tr class="group hover:bg-surface-container-low transition-colors">
-<td class="px-4 lg:px-8 py-6">
-<div class="flex items-center gap-3 lg:gap-4">
-<div class="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-gradient-to-tr from-[#edd7a8]/20 to-[#d0bb8e]/5 flex items-center justify-center text-primary font-bold text-xs lg:text-base">{{ lead.full_name[:2] | upper }}</div>
-<div>
-<p class="font-bold text-on-surface text-sm lg:text-base">{{ lead.full_name }}</p>
-<p class="text-[10px] lg:text-xs text-on-surface-variant">{{ lead.email }}</p>
-</div>
-</div>
-</td>
-<td class="px-8 py-6">
-<span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-tighter">{{ lead.service }}</span>
-</td>
-<td class="px-4 lg:px-8 py-6 text-sm text-on-surface-variant">{{ lead.created_at.strftime('%b %d, %Y') }}</td>
-<td class="px-8 py-6">
-<div class="flex items-center gap-2">
-<span class="w-2 h-2 rounded-full {% if lead.status == 'New' %}bg-secondary opacity-50{% elif lead.status == 'Urgent' %}bg-error shadow-[0_0_8px_#ffb4ab]{% elif lead.status == 'Processing' %}bg-tertiary shadow-[0_0_8px_#c2c4e4]{% else %}bg-[#edd7a8] shadow-[0_0_8px_#edd7a8]{% endif %}"></span>
-<span class="text-xs font-bold {% if lead.status == 'New' %}text-on-surface-variant{% elif lead.status == 'Urgent' %}text-error{% elif lead.status == 'Processing' %}text-tertiary{% else %}text-[#edd7a8]{% endif %} uppercase">{{ lead.status }}</span>
-</div>
-</td>
-<td class="px-4 lg:px-8 py-6 text-right">
-<div class="flex justify-end gap-2 lg:opacity-0 group-hover:opacity-100 transition-opacity">
-<!-- Mark Qualified -->
-<form action="{{ url_for('update_status', id=lead.id) }}" method="POST" class="inline">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <input type="hidden" name="status" value="Qualified">
-    <button type="submit" title="Mark Qualified" class="p-2 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg">check_circle</span></button>
-</form>
-<!-- Mark Urgent -->
-<form action="{{ url_for('update_status', id=lead.id) }}" method="POST" class="inline">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <input type="hidden" name="status" value="Urgent">
-    <button type="submit" title="Mark Urgent" class="p-2 text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-lg">priority_high</span></button>
-</form>
-<!-- Edit -->
-<a href="{{ url_for('edit_lead', id=lead.id) }}" title="Edit Lead" class="p-2 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg">edit</span></a>
-<!-- Delete -->
-<form action="{{ url_for('delete_lead', id=lead.id) }}" method="POST" class="inline" onsubmit="return confirm('Delete this lead permanently?');">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <button type="submit" title="Delete Lead" class="p-2 text-on-surface-variant hover:text-error transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button>
-</form>
-</div>
-</td>
-</tr>
-{% else %}
-<tr><td colspan="5" class="px-8 py-12 text-center text-on-surface-variant text-lg">
-  {% if search %}No leads matching "<span class="text-primary font-bold">{{ search }}</span>".{% elif service_filter %}No <span class="text-primary font-bold">{{ service_filter }}</span> leads found.{% else %}No leads found.{% endif %}
-</td></tr>
-{% endfor %}
-</tbody>
-</table>
-
-<!-- FUNCTIONAL Pagination -->
-<div class="bg-surface-container-highest/20 px-8 py-4 flex justify-between items-center">
-<p class="text-sm text-on-surface-variant font-medium">Displaying <span class="text-primary font-bold">{{ start_num }} - {{ end_num }}</span> of {{ filtered_count }} dossiers</p>
-<div class="flex items-center gap-2">
-{% if page > 1 %}
-<a href="{{ url_for('admin_dashboard', page=page-1, service=service_filter, search=search) }}" class="w-8 h-8 rounded-md flex items-center justify-center border border-outline-variant/30 text-on-surface-variant hover:border-primary/50 transition-colors">
-<span class="material-symbols-outlined text-sm">chevron_left</span>
-</a>
-{% endif %}
-{% for p in range(1, total_pages + 1) %}
-<a href="{{ url_for('admin_dashboard', page=p, service=service_filter, search=search) }}" class="w-8 h-8 rounded-md flex items-center justify-center {% if p == page %}bg-primary text-on-primary-fixed font-bold{% else %}border border-outline-variant/30 text-on-surface-variant hover:text-primary{% endif %} text-xs font-bold transition-colors">{{ p }}</a>
-{% endfor %}
-{% if page < total_pages %}
-<a href="{{ url_for('admin_dashboard', page=page+1, service=service_filter, search=search) }}" class="w-8 h-8 rounded-md flex items-center justify-center border border-outline-variant/30 text-on-surface-variant hover:border-primary/50 transition-colors">
-<span class="material-symbols-outlined text-sm">chevron_right</span>
-</a>
-{% endif %}
-</div>
-</div>
-</div>
-
-<!-- Dashboard Analytics - DYNAMIC -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-<div class="bg-surface-container-low p-6 rounded-2xl relative overflow-hidden group">
-<div class="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform"></div>
-<p class="text-xs font-black uppercase tracking-widest text-[#edd7a8] mb-4">Total Leads</p>
-<h3 class="text-3xl font-headline font-extrabold text-on-surface">{{ total_leads }}</h3>
-<p class="text-sm text-on-surface-variant mt-2 flex items-center gap-1">
-<span class="material-symbols-outlined text-xs text-[#edd7a8]">trending_up</span>
-<span class="font-bold text-[#edd7a8]">All time</span>
-</p>
-</div>
-<div class="bg-surface-container-low p-6 rounded-2xl relative overflow-hidden group">
-<div class="absolute top-0 right-0 w-24 h-24 bg-tertiary/5 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform"></div>
-<p class="text-xs font-black uppercase tracking-widest text-tertiary mb-4">New Leads</p>
-<h3 class="text-3xl font-headline font-extrabold text-on-surface">{{ new_leads }}</h3>
-<p class="text-sm text-on-surface-variant mt-2 flex items-center gap-1">
-<span class="material-symbols-outlined text-xs text-tertiary" style="font-variation-settings: 'FILL' 1;">verified</span>
-Awaiting review
-</p>
-</div>
-<div class="bg-surface-container-low p-6 rounded-2xl relative overflow-hidden group">
-<div class="absolute top-0 right-0 w-24 h-24 bg-error/5 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform"></div>
-<p class="text-xs font-black uppercase tracking-widest text-error mb-4">Urgent</p>
-<h3 class="text-3xl font-headline font-extrabold text-on-surface">{{ urgent_leads }}</h3>
-<p class="text-sm text-on-surface-variant mt-2 flex items-center gap-1">
-<span class="material-symbols-outlined text-xs text-error">priority_high</span>
-{% if urgent_leads > 0 %}{{ urgent_leads }} require attention{% else %}All clear{% endif %}
-</p>
-</div>
-</div>
-</div>
-</main>
-</body></html>
-<!-- KANBAN BOARD VIEW -->
+<!-- Kanban view -->
 <div id="view-kanban" class="hidden">
-    <div class="flex gap-6 overflow-x-auto pb-4 items-start minimal-scrollbar xl:min-h-[70vh]">
-        {% set statuses = [('New', 'border-secondary', 'text-secondary', 'bg-secondary'), ('Processing', 'border-tertiary', 'text-tertiary', 'bg-tertiary'), ('Urgent', 'border-error', 'text-error', 'bg-error'), ('Qualified', 'border-primary', 'text-primary', 'bg-primary')] %}
-        {% for status_name, border_class, text_class, bg_class in statuses %}
-        <div class="w-80 flex-shrink-0 bg-surface-container-low rounded-xl flex flex-col border-t-4 {{ border_class }} kanban-column" data-status="{{ status_name }}" ondragover="allowDrop(event)" ondrop="drop(event)" style="min-height: 250px;">
-            <div class="p-4 border-b border-outline-variant/10 flex justify-between items-center pointer-events-none">
-                <h3 class="font-bold uppercase tracking-widest text-sm {{ text_class }} flex items-center gap-2"><div class="w-2 h-2 rounded-full {{ bg_class }}"></div>{{ status_name }}</h3>
-                <span class="bg-surface-variant text-xs px-2 py-0.5 rounded-full text-on-surface-variant font-bold">
-                    {{ all_leads_board|selectattr('status', 'equalto', status_name)|list|length }}
-                </span>
-            </div>
-            <div class="p-4 flex-1 overflow-y-auto space-y-3 kanban-list minimal-scrollbar">
-                {% for lead in all_leads_board if lead.status == status_name %}
-                <div class="bg-surface rounded-lg p-4 shadow-lg border-l-2 {% if lead.status == 'Urgent'%}border-[#ffb4ab]{% else %}border-[#4c463b]{% endif %} cursor-grab active:cursor-grabbing hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(206,197,183,0.08)] transition-all kanban-card relative" draggable="true" ondragstart="drag(event)" id="card-{{ lead.id }}" data-id="{{ lead.id }}">
-                    <div class="flex justify-between items-start mb-2 pointer-events-none">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tighter bg-primary/10 text-primary">{{ lead.service }}</span>
-                        <span class="text-[10px] font-bold text-on-surface-variant/70">{{ lead.created_at.strftime('%b %d') }}</span>
-                    </div>
-                    <p class="font-bold text-on-surface text-sm mb-0.5 pointer-events-none">{{ lead.full_name }}</p>
-                    <p class="text-xs text-on-surface-variant/70 mb-3 truncate pointer-events-none" title="{{ lead.email }}">{{ lead.email }}</p>
-                    {% if lead.message %}
-                    <p class="text-[11px] text-on-surface-variant/60 border-t border-outline-variant/5 pt-2 line-clamp-2 pointer-events-none">{{ lead.message }}</p>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
+  <div class="flex gap-4 overflow-x-auto pb-4 items-start minimal-scrollbar">
+    {% set statuses = [('New', 'bg-secondary'), ('Processing', 'bg-tertiary'), ('Urgent', 'bg-error'), ('Qualified', 'bg-primary')] %}
+    {% for status_name, dot in statuses %}
+    <div class="w-72 flex-shrink-0 bg-surface-container-low rounded-xl flex flex-col kanban-column" data-status="{{ status_name }}" ondragover="allowDrop(event)" ondrop="drop(event)" style="min-height: 200px;">
+      <div class="p-4 border-b border-outline-variant/10 flex justify-between items-center">
+        <h3 class="font-bold uppercase tracking-widest text-xs text-on-surface flex items-center gap-2"><span class="w-2 h-2 rounded-full {{ dot }}"></span>{{ status_name }}</h3>
+        <span class="bg-surface-variant text-xs px-2 py-0.5 rounded-full text-on-surface-variant font-bold">{{ all_leads_board|selectattr('status', 'equalto', status_name)|list|length }}</span>
+      </div>
+      <div class="p-3 flex-1 space-y-2 kanban-list">
+        {% for lead in all_leads_board if lead.status == status_name %}
+        <div class="bg-surface rounded-lg p-3 border border-outline-variant/10 cursor-grab active:cursor-grabbing hover:-translate-y-0.5 transition-all kanban-card" draggable="true" ondragstart="drag(event)" id="card-{{ lead.id }}" data-id="{{ lead.id }}" data-status="{{ status_name }}">
+          <div class="flex justify-between items-start mb-1.5 pointer-events-none">
+            <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tight bg-primary/10 text-primary">{{ lead.service }}</span>
+            <span class="text-[10px] font-bold text-on-surface-variant/70">{{ lead.created_at.strftime('%b %d') }}</span>
+          </div>
+          <p class="font-bold text-on-surface text-sm pointer-events-none">{{ lead.full_name }}</p>
+          <p class="text-xs text-on-surface-variant/70 truncate pointer-events-none">{{ lead.email }}</p>
         </div>
         {% endfor %}
+      </div>
     </div>
+    {% endfor %}
+  </div>
+  <p class="text-xs text-on-surface-variant mt-3 flex items-center gap-1"><span class="material-symbols-outlined text-sm">info</span> Drag cards between columns to update status.</p>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
 <script>
-    function switchView(view) {
-        const tableBtn = document.getElementById('btn-table-view');
-        const kanbanBtn = document.getElementById('btn-kanban-view');
-        const tableContainer = document.getElementById('view-table');
-        const kanbanContainer = document.getElementById('view-kanban');
-        const pagination = document.getElementById('view-pagination');
-        
-        if (view === 'table') {
-            if(tableContainer) tableContainer.classList.remove('hidden');
-            if(pagination) pagination.classList.remove('hidden');
-            if(kanbanContainer) kanbanContainer.classList.add('hidden');
-            tableBtn.className = 'p-2 rounded-md bg-primary text-on-primary-fixed flex items-center shadow transition-all';
-            kanbanBtn.className = 'p-2 rounded-md text-on-surface-variant hover:text-on-surface flex items-center transition-all';
-        } else {
-            if(tableContainer) tableContainer.classList.add('hidden');
-            if(pagination) pagination.classList.add('hidden');
-            if(kanbanContainer) kanbanContainer.classList.remove('hidden');
-            kanbanBtn.className = 'p-2 rounded-md bg-primary text-on-primary-fixed flex items-center shadow transition-all';
-            tableBtn.className = 'p-2 rounded-md text-on-surface-variant hover:text-on-surface flex items-center transition-all';
-        }
-        localStorage.setItem('lead_view_preference', view);
-    }
+function switchView(view) {
+  const tableBtn = document.getElementById('btn-table-view');
+  const kanbanBtn = document.getElementById('btn-kanban-view');
+  const table = document.getElementById('view-table');
+  const kanban = document.getElementById('view-kanban');
+  const active = 'p-2 rounded-md bg-primary text-on-primary-fixed flex items-center';
+  const idle = 'p-2 rounded-md text-on-surface-variant hover:text-on-surface flex items-center';
+  if (view === 'kanban') {
+    table.classList.add('hidden'); kanban.classList.remove('hidden');
+    kanbanBtn.className = active; tableBtn.className = idle;
+  } else {
+    kanban.classList.add('hidden'); table.classList.remove('hidden');
+    tableBtn.className = active; kanbanBtn.className = idle;
+  }
+  localStorage.setItem('lead_view', view);
+}
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('lead_view') === 'kanban') switchView('kanban');
+});
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const savedView = localStorage.getItem('lead_view_preference');
-        if (savedView === 'kanban') { switchView('kanban'); }
-    });
+function allowDrop(ev) { ev.preventDefault(); ev.currentTarget.classList.add('bg-surface-variant/30'); }
+function drag(ev) { ev.dataTransfer.setData('text', ev.target.id); ev.target.classList.add('opacity-40'); }
 
-    function allowDrop(ev) { ev.preventDefault(); ev.currentTarget.classList.add('bg-surface-variant/30'); }
+function drop(ev) {
+  ev.preventDefault();
+  document.querySelectorAll('.kanban-column').forEach(c => c.classList.remove('bg-surface-variant/30'));
+  const card = document.getElementById(ev.dataTransfer.getData('text'));
+  if (!card) return;
+  card.classList.remove('opacity-40');
+  const column = ev.currentTarget.closest('.kanban-column');
+  if (!column) return;
+  const oldStatus = card.dataset.status || Array.from(document.querySelectorAll('.kanban-column')).find(c => c.contains(card))?.dataset.status;
+  const newStatus = column.dataset.status;
+  column.querySelector('.kanban-list').appendChild(card);
+  if (oldStatus !== newStatus) {
+    card.dataset.status = newStatus;
+    updateStatus(card.dataset.id, newStatus);
+    const oc = document.querySelector(`.kanban-column[data-status='${oldStatus}'] span.bg-surface-variant`);
+    const nc = document.querySelector(`.kanban-column[data-status='${newStatus}'] span.bg-surface-variant`);
+    if (oc) oc.innerText = Math.max(0, parseInt(oc.innerText) - 1);
+    if (nc) nc.innerText = parseInt(nc.innerText) + 1;
+  }
+}
+document.querySelectorAll('.kanban-column').forEach(z => {
+  z.addEventListener('dragleave', e => { if (e.target === z) z.classList.remove('bg-surface-variant/30'); });
+});
 
-    function drag(ev) {
-        ev.dataTransfer.setData("text", ev.target.id);
-        ev.target.classList.add('opacity-40');
-    }
-
-    function drop(ev) {
-        ev.preventDefault();
-        document.querySelectorAll('.kanban-column').forEach(col => col.classList.remove('bg-surface-variant/30'));
-        const cardId = ev.dataTransfer.getData("text");
-        const cardElem = document.getElementById(cardId);
-        if(!cardElem) return;
-
-        cardElem.classList.remove('opacity-40');
-        const column = ev.currentTarget.closest('.kanban-column');
-        if (!column) return;
-        
-        const targetContainer = column.querySelector('.kanban-list');
-        const originalStatus = cardElem.dataset.oldStatus || Array.from(document.querySelectorAll('.kanban-column')).find(c => c.contains(cardElem))?.dataset.status;
-        const newStatus = column.dataset.status;
-        
-        targetContainer.appendChild(cardElem);
-        cardElem.dataset.oldStatus = newStatus;
-        
-        // Update styling specific to status
-        if(newStatus === 'Urgent') {
-            cardElem.classList.remove('border-[#4c463b]');
-            cardElem.classList.add('border-[#ffb4ab]');
-        } else {
-            cardElem.classList.remove('border-[#ffb4ab]');
-            cardElem.classList.add('border-[#4c463b]');
-        }
-
-        if (originalStatus !== newStatus) {
-            updateStatusInDB(cardElem.dataset.id, newStatus);
-            const oldCounter = document.querySelector(`.kanban-column[data-status='${originalStatus}'] span`);
-            const newCounter = document.querySelector(`.kanban-column[data-status='${newStatus}'] span`);
-            if(oldCounter) oldCounter.innerText = Math.max(0, parseInt(oldCounter.innerText) - 1);
-            if(newCounter) newCounter.innerText = parseInt(newCounter.innerText) + 1;
-        }
-    }
-    
-    document.querySelectorAll('.kanban-column').forEach(zone => {
-        zone.addEventListener('dragleave', e => { if (e.target === zone) zone.classList.remove('bg-surface-variant/30'); });
-        zone.addEventListener('dragend', e => { if(e.target.id && e.target.id.startsWith("card-")) document.getElementById(e.target.id).classList.remove('opacity-40'); });
-    });
-
-    function updateStatusInDB(leadId, newStatus) {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        fetch(`/api/update_status/${leadId}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
-            body: JSON.stringify({ status: newStatus })
-        }).catch(err => console.error(err));
-    }
-
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
-        const isHidden = sidebar.classList.contains('-translate-x-full');
-        
-        if (isHidden) {
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.add('opacity-100'), 10);
-        } else {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.remove('opacity-100');
-            setTimeout(() => overlay.classList.add('hidden'), 300);
-        }
-    }
+function updateStatus(id, status) {
+  const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  fetch(`/api/update_status/${id}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': token },
+    body: JSON.stringify({ status })
+  }).catch(err => console.error(err));
+}
 </script>
-<style>
-.minimal-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
-.minimal-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 4px; }
-.minimal-scrollbar::-webkit-scrollbar-thumb { background: rgba(76, 70, 59, 0.4); border-radius: 4px; }
-.minimal-scrollbar::-webkit-scrollbar-thumb:hover { background: #edd7a8; }
-</style>
+{% endblock %}

@@ -11,14 +11,17 @@
         body { background-color: #121415; color: #e2e2e3; font-family: 'Manrope', sans-serif; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
-    <div class="bg-[#1a1c1d] p-8 rounded-xl w-full max-w-sm border border-[#4c463b]/30 shadow-2xl">
-        <h2 class="text-[#edd7a8] font-['Plus_Jakarta_Sans'] text-2xl font-bold mb-6 text-center">Admin Access</h2>
-        
+<body class="flex items-center justify-center min-h-screen px-4">
+    <div class="bg-surface-container-low p-8 rounded-xl w-full max-w-sm border border-outline-variant/20 shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black tracking-tighter text-primary font-headline">Comfydoe</h1>
+            <p class="text-sm text-on-surface-variant font-bold mt-1">Admin Console</p>
+        </div>
+
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             {% for category, message in messages %}
-              <div class="mb-4 text-sm font-bold {% if category == 'error' %}text-[#ffb4ab]{% else %}text-[#dac497]{% endif %}">
+              <div class="mb-4 p-3 rounded-lg text-sm font-bold {% if category == 'error' %}bg-error-container/30 text-error{% else %}bg-outline-variant/20 text-primary{% endif %}">
                 {{ message }}
               </div>
             {% endfor %}
@@ -28,15 +31,15 @@
         <form action="{{ url_for('login') }}" method="POST" class="space-y-4">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div>
-                <label class="block text-sm font-bold mb-1 text-[#cec5b7]">Username</label>
-                <input type="text" name="username" required class="w-full bg-[#121415] border border-[#4c463b]/50 rounded text-white p-3 focus:ring-1 focus:ring-[#edd7a8]">
+                <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Username</label>
+                <input type="text" name="username" required class="w-full bg-surface border border-outline-variant/30 rounded-lg text-on-surface p-3 focus:ring-1 focus:ring-primary/50">
             </div>
             <div>
-                <label class="block text-sm font-bold mb-1 text-[#cec5b7]">Password</label>
-                <input type="password" name="password" required class="w-full bg-[#121415] border border-[#4c463b]/50 rounded text-white p-3 focus:ring-1 focus:ring-[#edd7a8]">
+                <label class="block text-xs font-bold mb-2 text-on-surface-variant uppercase tracking-widest">Password</label>
+                <input type="password" name="password" required class="w-full bg-surface border border-outline-variant/30 rounded-lg text-on-surface p-3 focus:ring-1 focus:ring-primary/50">
             </div>
-            <button type="submit" class="w-full mt-4 bg-gradient-to-br from-[#edd7a8] to-[#d0bb8e] text-[#251a00] font-bold p-3 rounded hover:scale-[1.02] transition-transform">
-                Login
+            <button type="submit" class="w-full mt-2 bg-primary text-on-primary-fixed font-bold p-3 rounded-lg hover:scale-[1.02] transition-transform">
+                Sign In
             </button>
         </form>
     </div>
