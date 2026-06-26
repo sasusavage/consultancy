@@ -16,6 +16,9 @@ __pycache__/
 venv/
 env/
 
+# Node / Tailwind build (the built static/css/app.css IS committed)
+node_modules/
+
 # OS / editor
 .DS_Store
 Thumbs.db

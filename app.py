@@ -5,6 +5,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from flask_wtf.csrf import CSRFProtect
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 
@@ -29,6 +30,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+migrate = Migrate(app, db)
 
 # CSRF protection for all POST forms
 csrf = CSRFProtect(app)
@@ -44,7 +46,7 @@ EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))
 
 @app.route('/')
 def index():
@@ -304,9 +306,42 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.errorhandler(400)
+def bad_request(e):
+    return render_template('error.html', code=400, title='Bad Request',
+                           message="Your request couldn't be processed. This can happen if a "
+                                   "form session expired — please go back and try again."), 400
+
+@app.errorhandler(403)
+def forbidden(e):
+    return render_template('error.html', code=403, title='Forbidden',
+                           message="You don't have permission to access this page."), 403
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('error.html', code=404, title='Page Not Found',
+                           message="The page you're looking for doesn't exist or has moved."), 404
+
+@app.errorhandler(429)
+def too_many_requests(e):
+    return render_template('error.html', code=429, title='Too Many Requests',
+                           message="You're doing that too often. Please wait a moment and try again."), 429
+
+@app.errorhandler(500)
+def server_error(e):
+    db.session.rollback()
+    return render_template('error.html', code=500, title='Something Went Wrong',
+                           message="An unexpected error occurred on our end. Please try again later."), 500
+
+
 def create_admin_if_not_exists():
     with app.app_context():
-        db.create_all()
+        # Schema is owned by Alembic migrations (flask db upgrade). As a
+        # convenience for zero-config local dev, create tables if they're
+        # missing — a no-op once migrations have been applied.
+        from sqlalchemy import inspect
+        if not inspect(db.engine).has_table(User.__tablename__):
+            db.create_all()
         admin_username = os.getenv('ADMIN_USERNAME', 'admin')
         admin_password = os.getenv('ADMIN_PASSWORD')
         if not admin_password:
@@ -326,9 +361,12 @@ def create_admin_if_not_exists():
             db.session.add(user)
             db.session.commit()
 
-# Ensure tables and admin user are created whether run locally or via Gunicorn
-with app.app_context():
-    create_admin_if_not_exists()
+# Ensure tables and admin user exist whether run locally or via Gunicorn.
+# Skipped during `flask db ...` migration commands so Alembic can manage the
+# schema cleanly.
+if os.getenv('SKIP_BOOTSTRAP') != '1':
+    with app.app_context():
+        create_admin_if_not_exists()
 
 if __name__ == '__main__':
     app.run(debug=True, port=5007)
